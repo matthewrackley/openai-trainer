@@ -1,0 +1,43 @@
+{
+  "name": "openai-trainer",
+  "productName": "OpenAI",
+  "description": "My Electron application description",
+  "keywords": [],
+  "main": "./main.js",
+  "version": "1.0.5",
+  "author": "kali",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "@progress/kendo-react-conversational-ui": "5.12.1-dev.202303210819",
+    "@progress/kendo-react-dateinputs": "5.12.1-dev.202303210819",
+    "api-ai-javascript": "2.0.0-beta.21",
+    "crypto-js": "4.1.1",
+    "dotenv": "16.0.3",
+    "express": "4.18.2",
+    "jquery": "3.6.4",
+    "openai": "3.2.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "socket.io": "4.6.1",
+    "window": "4.2.7"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.21.3",
+    "@eove/eslint-config-electron": "^1.8.0",
+    "electron": "22.0.2"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matthewrackley/openai-trainer.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/matthewrackley/openai-trainer/issues"
+  },
+  "homepage": "https://github.com/matthewrackley/openai-trainer#readme"
+}

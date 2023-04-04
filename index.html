@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';" >
+    <link href="./styles.css" rel="stylesheet">
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <div class="column">
+      <header>
+        <h1>OpenAI ChatApp!</h1>
+      </header>
+      <div id="modal" class="modal">
+          <div class="modal-content">
+              <span class="close">&times;</span>
+              <p>Your OpenAI API Key is not set!</p></br>
+              <p>Please provide it below!</p></br>
+              <input id="APIKEY" autocomplete="off"><button for="APIKEY" type="submit">Submit</button>
+          </div>
+      </div>
+      <div class="chat-area">
+        <div id="app"></div>
+      </div>
+      <footer>
+        <div class="column">
+          <form id="formDataEvent" action="#" onsubmit="callApiGateway();" >
+            <div class="row">
+              <input id="message" autocomplete="off"><input type="submit" value="Submit">
+            </div>
+            <div class="row">
+              <input type="file" id="fileInput" name="file" accept="all" onclick="selectFile();">
+            </div>
+          </form>
+        </div>
+      </footer>
+    </div>
+      <!-- You can also require other files to run in this process -->
+    <script src="./renderer.js"></script>
+  </body>
+</html>
