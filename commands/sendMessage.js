@@ -1,17 +1,28 @@
-const { userClient, botClient } = require('../classes/User');
+const { User, userClient, botClient } = require('../classes/User');
+const { createCompletion } = require('../app');
+
+
+
+async function sendmessage () {
+    if (id.includes(userClient.id))
+}
+
 
 module.exports = {
-    sendMessage: function (message, ID) {
-        if (this.ID == userClient.ID) {
-            let content = {
-                name: this.nickname,
-                ID: this.ID,
-                date: timeAndDate(),
-                message: message,
-                attachment: uploadFile() || null
-            }
-            return content;
-        } else if (this.ID === `${ botClient.ID }`) {
+    sendMessage: new User(this.sendMessage)
+    sendMessage: async function (message, userClient) {
+        if (!userClient.ID) {
+            let options = {
+                model: "text-davinci-003",
+                prompt: message,
+                max_tokens: 7,
+                stream: true,
+                logprobs: null,
+                stop: "\n\nThat's my answer, " + userClient.nickname + ".",
+            };
+            return options;
+        } else if (User.ID == botClient.ID) {
+            let response = await createCompletion(function (message,);
             let content = {
                 name: this.nickname,
                 ID: this.ID,

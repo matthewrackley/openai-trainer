@@ -1,68 +1,52 @@
-const fs = require('fs');
-const checkType = require('./checkType');
-module.exports = {
-    fileUpload: function () {
-        const fs = require('fs');
-        const checkType = require('./checkType');
+const fs = require('fs').promises;
+const path = require('path');
 
-        function getAttributes (file) {
-            return new Promise((resolve, reject) => {
-                const attributes = {
-                    fileName: file.name,
-                    fileType: file.type,
-                    fileSuffix: file.name.split('.').pop(),
-                    fileSize: file.size
-                };
-                if (file.size > 1024 * 1024 * 256) {
-                    reject("Total size is too large!\nAttachments must not exceed 256MB!");
-                } else {
-                    resolve(attributes);
-                }
-            });
+module.exports = {
+    async getAttributes ({ name, type, size }) {
+        const attributes = {
+            fileName: name,
+            fileType: type,
+            fileSuffix: name.split('.').pop(),
+            fileSize: size,
         };
-        async function uploadToServer (file) {
-            if (file.name.includes("/")) {
-                const directories = file.name.split('/');
-                directories.pop();
-                let directory = '/var/www/html';
-                for (let i = 0; i < directories.length; i++) {
-                    directory = `${ directory }/${ directories[i] }`;
-                    if (!fs.existsSync(directory)) {
-                        fs.mkdirSync(directory);
+        if (size > 1024 * 1024 * 256) {
+            throw new Error("Total size is too large!\nAttachments must not exceed 256MB!");
+        } else {
+            return attributes;
+        }
+    },
+    async uploadToServer (file) {
+        const { name } = file;
+        const filePath = path.resolve('/var/www/html', name);
+        if (file.name.includes("/")) {
+            const directories = file.name.split('/');
+            directories.pop();
+            let dirPath = '/var/www/html';
+            for (let i = 0; i < directories.length; i++) {
+                dirPath = `${ dirPath }/${ directories[i] }`;
+                await fs.mkdir(dirPath).catch(err => {
+                    if (err.code !== 'EEXIST') {
+                        throw err;
                     }
-                }
+                });
             }
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    fs.writeFile(`/var/www/html/${ file.name }`, reader.result, 'utf8', err => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve('Your files have been uploaded!');
-                        }
-                    });
-                };
+        }
+        const data = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            if (typeof Blob !== 'undefined') {
                 reader.readAsBinaryString(file);
-            });
-        };
-        let fileInput = document.getElementById('fileInput') as HTMLInputElement;
-        fileInput?.addEventListener('change', async (e) => {
-            const files = fileInput.files;
-            let count = 0;
-            const recursiveHelper = async (files) => {
-                if (count < files.length && count < 5) {
-                    const file = files[count];
-                    count++;
-                    const attributes = await getAttributes(file);
-                    if (file.files) {
-                        await recursiveHelper(file.files);
-                    }
-                    await uploadToServer(file);
-                    return attributes;
-                }
-            };
-            await recursiveHelper(files);
+            } else {
+                reader.readAsArrayBuffer(file);
+            }
         });
+        if (typeof data === 'string') {
+            await fs.writeFile(filePath, data, 'utf8');
+        } else if (data instanceof ArrayBuffer) {
+            await fs.writeFile(filePath, Buffer.from(data));
+        } else {
+            throw new Error('Failed to write file: invalid data');
+        }
+        return 'Your files have been uploaded!';
     },
 };

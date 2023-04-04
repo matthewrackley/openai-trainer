@@ -1,6 +1,6 @@
 const { Configuration, OpenAIApi } = require("openai");
 const dotenv = require("dotenv");
-const { timeAndDate, uuidv4 } = require('./define.js');
+const { timeAndDate, uuidv4 } = require('./commands/uuidv4');
 const uploadFile = require('./fileUpload.js');
 dotenv.config();
 const apiKey = process.env.OPENAI_API_KEY;
@@ -32,8 +32,18 @@ export const openai = new OpenAIApi(configuration);
 
 //const formDataEvent = document.getElementById('formDataEvent');
 //formDataEvent.addEventListener('submit', `${ userClient.sendMessage() }`).then(userClient.chatMessage);
-
-
+const sendMessage = async function (message) {
+    let options = {
+        model: "text-davinci-003",
+        prompt: message,
+        max_tokens: 7,
+        stream: true,
+        logprobs: null,
+        stop: "\n\nThat's my answer, " + userClient.nickname + ".",
+    };
+    return options;
+}
+const response = await openai.createCompletion(await sendMessage(message));
 ///////////////////////////////////////////////
 export async function createCompletion (message) {
     let options = {

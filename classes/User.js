@@ -9,7 +9,7 @@ module.exports = {
             // this.ID should be a UUID uniquely assigned to each User
             // We store it in session storage solely for learning.
             this.id = uuidv4();
-            sessionStorage.setItem('uuid', this.ID);
+            sessionStorage.setItem('uuid', this.id);
             window.addEventListener("beforeunload", function (_event) {
                 sessionStorage.removeItem('uuid');
             });
