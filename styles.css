@@ -65,11 +65,10 @@ div.chat-area {
     border-radius: 15px;
     border-width: 2px;
     border-color: #FFFFFF30;
-    flex-grow: 1;
     position: fixed;
-    top: 10%;
-    bottom: 10%;
-    width: -webkit-fill-available;
+    top: 12.5%;
+    bottom: 12.5%;
+    width: 95vw;
 }
 div#app {
     width: 100%;
@@ -125,7 +124,7 @@ input[type="file"] {
 
 .modal {
   display: none;
-  position: fixed; 
+  position: fixed;
   z-index: 1;
   left: 0;
   top: 0;
@@ -153,4 +152,39 @@ input[type="file"] {
     color: #000;
     text-decoration:none;
     cursor: pointer;
+}
+
+div.Message#userClient {
+    display: flex;
+    align-self: self-start;
+    position: fixed;
+    width: 100%;
+}
+div.Message#botClient {
+    display: flex;
+    align-self: self-end;
+    position: fixed;
+    width: 100%;
+}
+div.ChatBubble#botClient {
+    display: block;
+    padding: 8px;
+    margin: 8px;
+    border: #000;
+    border-style: solid;
+    color: #000;
+    background-color: #FFF;
+}
+div.ChatBubble#userClient {
+    display: block;
+    padding: 8px;
+    margin: 8px;
+    border: #000;
+    border-style: solid;
+    color: #000;
+    background-color: coral;
+}
+div.message {
+    display: contents;
+    text-align: left;
 }

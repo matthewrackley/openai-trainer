@@ -1,5 +1,5 @@
 const { openai } = require('../app');
-const { userClient } = require('../classes/User.js');
+const { User, botClient, userClient } = require('../classes/User.js');
 
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
             logprobs: null,
             stop: "\n\nThat's my answer, " + userClient.nickname + ".",
         };
-        const response = await openai.createCompletion(options);
-        return response
+        botClient.message = await openai.createCompletion(options);
+        return botClient.message;
     },
 };

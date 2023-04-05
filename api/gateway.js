@@ -1,4 +1,9 @@
 const http = require('http');
+const { User, userClient, botClient } = require('../classes/User');
+const { name: sendMessage } = require('../commands/sendMessage');
+const { executionAsyncResource } = require('async_hooks');
+
+
 const server = http.createServer((request, response) => {
   if (request.method === 'POST' && request.url === '/') {
     let body = '';
@@ -10,7 +15,7 @@ const server = http.createServer((request, response) => {
       try {
         const { param1, param2 } = JSON.parse(body);
 
-        // Call your server-side function here with `param1` and `param2`
+        execute(key, param1, param2);
 
         const responseData = { data: 'Success!' };
         response.writeHead(200, { 'Content-Type': 'application/json' });

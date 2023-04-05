@@ -41,8 +41,8 @@ app.on('window-all-closed', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-const App = require('./app.js');
-const { fileUpload } = require('./commands/fileUpload.js');
+require('./app.js');
+require('./api/gateway');
 const { event } = require('jquery')
 
 let nonce = window.crypto.getRandomValues(new Uint8Array(32)).join('').replace(/\//g, '_');
