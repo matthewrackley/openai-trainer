@@ -2,10 +2,10 @@ const { uuidv4 } = require('../commands/uuidv4');
 require('../app')
 const fU = require('../commands/fileUpload');
 const { message } = require('../renderer');
-const { BotMessage } = require('../commands/createCompletion')
-
+const { createCompletion, options } = require('../commands/createCompletion');
+const e = require('express');
 module.exports = {
-    UserClient: {
+    User: {
         nickname: "You",
         username: "Matthew",
         id: uuidv4(),
@@ -15,17 +15,19 @@ module.exports = {
             attributes: fU.getAttributes(),
         },
     },
-    BotClient: {
+    Bot: {
         nickname: "OpenAI",
         username: "OpenAI",
         id: uuidv4(),
-        message: BotMessage,
+        message: new Promise(resolve =>
+            createCompletion(options(message))
+                .then(resolve)),
         attachment: {
             file: fU.uploadToServer(),
             attributes: fU.getAttributes(),
         },
     },
-    send: function (id, info) {
+    send (id, info) {
         id = this.id;
         switch (info) {
             case "username":
@@ -40,6 +42,7 @@ module.exports = {
                 return info;
         };
     },
+
 };
 
 // Create a new User object to represent the user/AI

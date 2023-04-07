@@ -1,7 +1,6 @@
 const http = require('http');
 const User = require('../classes/User');
 const { sendMessage } = require('../commands/sendMessage');
-const { executionAsyncResource } = require('async_hooks');
 
 
 const server = http.createServer((request, response) => {

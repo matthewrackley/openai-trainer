@@ -1,9 +1,8 @@
 const { Configuration, OpenAIApi } = require("openai");
+const Event = require('./classes/Event');
 const dotenv = require("dotenv");
-const Events = require('./classes/Event');
 dotenv.config();
 const apiKey = process.env.OPENAI_API_KEY;
-
 const fs = require('fs');
 const path = require('path');
 
@@ -24,10 +23,10 @@ function checkFunctionsInFolder (folderPath) {
     });
 }
 let folderPath = [
-    Events.ApiCall.path,
-    Events.ClassCall.path,
-    Events.ExecutionCreate.path,
-    Events.OccurenceCreate.path
+    Event.ApiCall.path,
+    Event.ClassCall.path,
+    Event.Execution.path,
+    Event.Occurence.path
 ];
 checkFunctionsInFolder(folderPath);
 

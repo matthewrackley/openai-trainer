@@ -1,19 +1,18 @@
 const app = require('../app');
 const { message } = require('../renderer');
-const User = require('../classes/User.js');
+const U = require('../classes/User.js');
+const { error } = require('jquery');
 const chatBubble = document.getElementById('app');
 
 module.exports = {
     ChatMessage: class extends HTMLElement {
-        constructor () {
+        constructor (username, message) {
             super();
-            message = User.message;
-            this.user = User.UserClient || User.BotClient;
             // Create a text node with the message content
-            const messageNode = document.createTextNode(this.message);
+            const messageNode = document.createTextNode(message);
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message';
-            messageDiv.id = this.user;
+            messageDiv.id = username;
             messageDiv.appendChild(messageNode);
             // Create another text Node to encapsulate our message content
             const bubbleDiv = document.createElement('div');
@@ -22,7 +21,7 @@ module.exports = {
             // Create another Text Node for the final part
             const messageContainer = document.createElement('div');
             messageContainer.className = 'Message';
-            messageContainer.id = this.user;
+            messageContainer.id = username;
             messageContainer.appendChild(bubbleDiv);
             const template = document.createElement('template');
             template.innerHTML = `
