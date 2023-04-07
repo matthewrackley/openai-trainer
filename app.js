@@ -1,11 +1,40 @@
 const { Configuration, OpenAIApi } = require("openai");
 const dotenv = require("dotenv");
-const { timeAndDate, uuidv4 } = require('./commands/uuidv4');
-const uploadFile = require('./fileUpload.js');
+const Events = require('./classes/Event');
 dotenv.config();
 const apiKey = process.env.OPENAI_API_KEY;
-const { userClient, botClient } = require('./classes/User')
-const { chatMessage } = require('./commands/chatMessage');
+
+const fs = require('fs');
+const path = require('path');
+
+function checkFunctionsInFolder (folderPath) {
+    fs.readdir(folderPath, (err, files) => {
+        if (err) throw err;
+        files.forEach(file => {
+            const filePath = path.join(folderPath, file);
+            if (filePath.endsWith('.js')) {
+                const functions = require(filePath);
+                for (let funcName in functions) {
+                    if (typeof functions[funcName] === 'function') {
+                        console.log(`Function ${ funcName } found in file ${ filePath }`);
+                    }
+                }
+            }
+        });
+    });
+}
+let folderPath = [
+    Events.ApiCall.path,
+    Events.ClassCall.path,
+    Events.ExecutionCreate.path,
+    Events.OccurenceCreate.path
+];
+checkFunctionsInFolder(folderPath);
+
+
+
+path.relative('./', '../commands').replace(/(\.)*(\\)*(\/)*(js)*/g, '')
+
 
 if (!apiKey) {
     console.log("Please set your OpenAI API Key");
@@ -36,11 +65,11 @@ const classesFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.j
 
 for (const file of classesFiles) {
     const filePath = path.join(classesPath, file);
-    const class = require(filePath);
+    const _class = require(filePath);
     if (classes.once) {
-        client.once(class.name, (...args) => class.class(...args));
+        client.once(_class.name, (...args) => class._class(...args));
     } else {
-        client.on(class.name, (...args) => class.class(...args));
+        client.on(_class.name, (...args) => class._class(...args));
     }
 }
 

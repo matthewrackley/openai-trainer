@@ -1,14 +1,14 @@
 const app = require('../app');
 const { message } = require('../renderer');
-const { User, userClient, botClient } = require('./User');
+const User = require('../classes/User.js');
 const chatBubble = document.getElementById('app');
 
 module.exports = {
-    ChatMessage: class ChatMessage extends HTMLElement {
+    ChatMessage: class extends HTMLElement {
         constructor () {
             super();
-            this.message = userClient?.message || botClient?.message;
-            this.user = userClient || botClient;
+            message = User.message;
+            this.user = User.UserClient || User.BotClient;
             // Create a text node with the message content
             const messageNode = document.createTextNode(this.message);
             const messageDiv = document.createElement('div');

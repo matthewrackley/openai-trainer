@@ -8,8 +8,8 @@
 /** @jsx React.DOM */
 const { User, userClient, botClient } = require('./classes/User');
 require('./app.js');
-require('./classes/ChatMessagwe')
-
+require('./classes/ChatMessage')
+require('./classes/User')
 let dataStrings = {};
 
 // Receive data and add it to the corresponding command
@@ -60,23 +60,19 @@ if (formDataEvent && formDataEvent.tagName === "FORM") {
     console.error('Form data event does not exist or is not a form element');
 }
 
-const fileLoader = document.getElementById('fileInput')?.attachInternals();
-let files = fileLoader
-let data = fileLoader?.addEventListener('change', result);
-if (data)
 
-    const selectFile(files) {
-        const fileInput = document.querySelector('input[type="file"]');
-        if (fileInput instanceof HTMLInputElement) {
-            fileInput?.click();
-            await new Promise(resolve => fileInput?.addEventListener('change', resolve));
-            if (fileInput.files && fileInput.files.length > 0) {
-                dataTransfer('fileUpload', fileInput.files);
-            } else {
-                console.log('No files selected');
-            }
+const selectFile(files) => {
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput instanceof HTMLInputElement) {
+        fileInput?.click();
+        await new Promise(resolve => fileInput?.addEventListener('change', resolve));
+        if (fileInput.files && fileInput.files.length > 0) {
+            dataTransfer('fileUpload', fileInput.files);
+        } else {
+            console.log('No files selected');
         }
-    };
+    }
+};
 
 
 

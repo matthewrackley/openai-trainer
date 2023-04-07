@@ -1,5 +1,10 @@
 module.exports = {
-    checkType: function (type) {
+    name: Commands.keyGuarded,
+    key: 'checkType',
+    execute (key, type) {
+        if (key !== 'checkType') {
+            return
+        }
         const types = {
             identification: [
                 "id",

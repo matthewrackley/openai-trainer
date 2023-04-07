@@ -1,7 +1,6 @@
 /* styles.css */
 
 /* Add styles here to customize the appearance of your app */
-
 html {
     width: 100%;
     height: 100%;
@@ -24,7 +23,7 @@ header {
     background-color: #F4F4F4;
     text-align: center;
     margin:inherit;
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
     position: fixed;
     top: 0;
 }
@@ -38,6 +37,7 @@ footer {
 h1 {
     color:#000000;
     text-align: center;
+    line-height: 100%;
 }
 h2,
 h3,
@@ -69,6 +69,7 @@ div.chat-area {
     top: 12.5%;
     bottom: 12.5%;
     width: 95vw;
+    place-items: center;
 }
 div#app {
     width: 100%;
@@ -93,6 +94,7 @@ div.column{
     width: 100%;
     height: 100%;
     padding: 0.10rem;
+    align-items: center;
 }
 
 ul#messages {
@@ -148,7 +150,7 @@ input[type="file"] {
     font-weight: bold;
 }
 .close:hover,
-.close:focus, {
+.close:focus {
     color: #000;
     text-decoration:none;
     cursor: pointer;

@@ -1,6 +1,6 @@
 const http = require('http');
-const { User, userClient, botClient } = require('../classes/User');
-const { name: sendMessage } = require('../commands/sendMessage');
+const User = require('../classes/User');
+const { sendMessage } = require('../commands/sendMessage');
 const { executionAsyncResource } = require('async_hooks');
 
 
