@@ -1,8 +1,8 @@
 const { uuidv4 } = require('../commands/uuidv4');
-require('../app')
-const fU = require('../commands/fileUpload');
+const fU = require('../events/fileUpload');
 const { message } = require('../renderer');
 const { createCompletion, options } = require('../commands/createCompletion');
+const { ChatMessage } = require('../classes/ChatMessage')
 const e = require('express');
 module.exports = {
     User: {
@@ -14,6 +14,9 @@ module.exports = {
             file: fU.uploadToServer(),
             attributes: fU.getAttributes(),
         },
+        send () {
+            new ChatMessage(this.username, this.message)
+        }
     },
     Bot: {
         nickname: "OpenAI",
@@ -26,9 +29,12 @@ module.exports = {
             file: fU.uploadToServer(),
             attributes: fU.getAttributes(),
         },
+        send () {
+            new ChatMessage(this.username, this.message)
+        }
     },
-    send (id, info) {
-        id = this.id;
+    sendInfo (id, info) {
+        this.id = id;
         switch (info) {
             case "username":
                 return this.username;

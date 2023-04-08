@@ -4,13 +4,9 @@ const { ChatMessage } = require('../classes/ChatMessage');
 
 module.exports = {
     createCompletion: async function (options) {
-        try {
-            const response = await openai.createCompletion(options);
-            openai.createCompletion(options);
-            return response
-        } catch (error) {
-            console.error(error);
-        };
+        const response = await openai.createCompletion(options);
+        openai.createCompletion(options);
+        return response
     },
     options (message) {
         let options = {

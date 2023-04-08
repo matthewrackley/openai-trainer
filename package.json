@@ -26,7 +26,8 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.3",
     "@eove/eslint-config-electron": "^1.8.0",
-    "electron": "22.0.2"
+    "electron": "22.0.2",
+    "eslint": "^8.37.0"
   },
   "directories": {
     "lib": "lib"

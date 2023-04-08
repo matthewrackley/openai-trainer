@@ -1,66 +1,67 @@
-class DB {
-    constructor (dbVersion) {
-        this.dbName = "LocalDB";
-        this.dbVersion = dbVersion;
-        this.db = null;
-    };
-    // open {#fff, 10}
-    open () {
-        const request = indexedDB.open(this.dbName, this.dbVersion);
-        request.onerror = function (event) {
-            console.error("Error opening DB", event.target.error);
-        };
-        request.onupgradeneeded = function (event) {
-            const db = event.target.result;
-            // Create an object store to hold the hashed values
-            const store = db.createObjectStore("hashedValues", { keyPath: "sessionID" });
-        };
-        request.onsuccess = function (event) {
-            const db = event.target.result;
-            console.log("Database opened successfully");
-        }.bind(this);
-    };
+const Event = require('../classes/Event');
+console.log(Event.getName());
 
-    insert (sessionID, value) {
-        if (!this.db) {
-            console.error("Database is not open");
-            return;
+module.exports = {
+    DB: class {
+        constructor (dbName, dbVersion) {
+            this.dbName = dbName;
+            this.dbVersion = dbVersion;
+        };
+        async saveSession (commandArray) {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(this.dbName, this.dbVersion);
+
+                request.onerror = function (event) {
+                    console.error("Error opening DB", event.target.errorCode);
+                    reject(event.target.errorCode);
+                };
+
+                request.onupgradeneeded = function (event) {
+                    const db = event.target.result;
+                    // Create an object store to hold the session data
+                    const objectStore = db.createObjectStore('commands', { keyPath: "Session", autoIncrement: true })
+                    objectStore.createIndex('name', 'name');
+                    objectStore.createIndex('hash', 'hash');
+                };
+
+                request.onsuccess = function (event) {
+                    const db = event.target.result;
+
+                    const transaction = db.transaction(["commands"], "readwrite");
+
+                    transaction.onerror = function (event) {
+                        console.error("Error saving commands", event.target.errorCode);
+                        reject(event.target.errorCode);
+                    };
+
+                    transaction.oncomplete = function (event) {
+                        console.log("Commands saved successfully");
+                        resolve();
+                    };
+
+                    const objectStore = transaction.objectStore("Commands");
+
+                    // Map the commands array to an array of promises that put each command into IndexedDB
+                    for (let i = 0; i < commandArray.length; i++) {
+                        const command = commandArray[i];
+                        objectStore.add({ name: command.name, hash: command.hash })
+                    }
+                };
+            });
         }
-        const transaction = this.db.transaction(["hashedValues"], "readwrite");
-        const objectStore = transaction.objectStore("hashedValues");
-        objectStore.put({ sessionID: sessionID, value: value });
-        transaction.oncomplete = function (event) {
-            console.log("Hashed value stored successfully");
-        };
-    };
-}
-const LocalDB = new DB(1);
+    },
+    localDB: new this.DB('OpenAIDB', 1.05)
+};
+const gA = Event.generateArray();
+const sessionID =
+    Math.random()
+        .toString(36)
+        .substring(2, 15) +
+    Math.random()
+        .toString(36)
+        .substring(2, 15);
 
 
-
-// request.onerror = function (event) {
-//     console.error("Error opening DB", event.target.errorCode);
-// };
-
-// request.onupgradeneeded = function (event) {
-//     const db = event.target.result;
-//     // Create an object store to hold the hashed values
-//     const store = db.createObjectStore("hashedValues", { keyPath: "sessionID" });
-// };
-
-// request.onsuccess = function (event) {
-//     const db = event.target.result;
-
-//     // Create a transaction and access the object store
-//     const sessionID = "ABC123";
-//     const hashedValue = "abc456def";
-
-//     const transaction = db.transaction(["hashedValues"], "readwrite");
-//     const objectStore = transaction.objectStore("hashedValues");
-
-//     objectStore.put({ sessionID: sessionID, value: hashedValue });
-
-//     transaction.oncomplete = function (event) {
-//         console.log("Hashed value stored successfully");
-//     };
-// };
+module.exports = {
+    Local: new DB("Local", 1.05),
+};

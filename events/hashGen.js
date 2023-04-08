@@ -2,6 +2,8 @@ const crypto = require('crypto');
 const util = require('util');
 const { request } = require('../api/LocalDB')
 let secureKey;
+const { Local } = require('../api/LocalDB');
+
 module.exports = {
     keyGen: () => {
         return new Promise((resolve, reject) => {
@@ -14,9 +16,9 @@ module.exports = {
             });
         });
     },
-    GeneratedKey: function GeneratedKey (name) {
-        module.exports.keyGen().then((secureKey) => {
-            sessionStorage.setItem(`${ this.name }`, secureKey);
+    GeneratedKey: async function (name) {
+        const generatedKey = this.keyGen().then((secureKey) => {
+            Local.saveSession(generatedKey);
         }).catch((err) => {
             console.error(err);
         });
