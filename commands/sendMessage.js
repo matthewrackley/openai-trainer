@@ -1,6 +1,6 @@
 const { User, Bot } = require('../classes/User');
 const { createCompletion, options } = require('../commands/createCompletion');
-
+const { ChatMessage } = require('../classes/ChatMessage')
 module.exports = {
     sendMessage: async function sendMessage (message, id) {
         JSON.parse(options)

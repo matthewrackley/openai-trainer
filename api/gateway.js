@@ -1,10 +1,15 @@
 const http = require('http');
-const User = require('../classes/User');
-const { sendMessage } = require('../commands/sendMessage');
+const U = require('../classes/User');
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 
 const server = http.createServer((request, response) => {
-  if (request.method === 'POST' && request.url === '/') {
+  if (request.method === 'POST' && request.url === '../') {
     let body = '';
     request.on('data', chunk => {
       body += chunk.toString();
@@ -12,9 +17,9 @@ const server = http.createServer((request, response) => {
 
     request.on('end', () => {
       try {
-        const { param1, param2 } = JSON.parse(body);
+        const { param1, param2 = undefined } = JSON.parse(body);
 
-        execute(key, param1, param2);
+        U.execute(param1, param2);
 
         const responseData = { data: 'Success!' };
         response.writeHead(200, { 'Content-Type': 'application/json' });
@@ -32,4 +37,15 @@ const server = http.createServer((request, response) => {
 
 server.listen(3000, () => {
   console.log('Server started on port 3000');
+});
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
+});
+app.post('/', (request, response) => {
+  const { param1, param2 = undefined } = request.body;
+
+  U.execute(param1, param2);
+
+  const responseData = { data: 'Success!' };
+  response.json(responseData);
 });

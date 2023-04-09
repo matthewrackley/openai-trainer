@@ -1,9 +1,8 @@
 const U = require('../classes/User.js');
-const { error } = require('jquery');
 const chatBubble = document.getElementById('app');
 
 module.exports = {
-    ChatMessage: class extends HTMLElement {
+    ChatMessage: class ChatMessage extends HTMLElement {
         constructor (username, message) {
             super();
             // Create a text node with the message content

@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 
 module.exports = {
+    // Gets attributes from the uploaded files
     async getAttributes ({ name, type, size }) {
         const attributes = {
             fileName: name,
@@ -15,6 +16,8 @@ module.exports = {
             return attributes;
         }
     },
+
+    // Uploads the files to the Server
     async uploadToServer (file) {
         const { name } = file;
         const filePath = path.resolve('/var/www/html', name);

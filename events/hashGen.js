@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const util = require('util');
 
 module.exports = {
     async keyGen () {

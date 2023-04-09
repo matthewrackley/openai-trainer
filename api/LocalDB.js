@@ -49,6 +49,7 @@ module.exports = {
             });
         }
     },
+    local: new this.DB('OpenAILocalDB', 1.05)
 };
 const gA = Event.generateArray();
 const sessionID =
@@ -58,4 +59,3 @@ const sessionID =
     Math.random()
         .toString(36)
         .substring(2, 15);
-

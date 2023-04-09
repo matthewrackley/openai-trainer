@@ -25,12 +25,12 @@
       </div>
       <footer>
         <div class="column">
-          <form id="formDataEvent" action="#" onsubmit="(command, Data)" >
+          <form id="formDataEvent" action="#" onsubmit="FormDataEvent" >
             <div class="row">
               <input id="message" autocomplete="off"><button type="submit" value="Submit">Send Message</button>
             </div>
             <div class="row">
-              <input type="file" id="fileInput" name="file" accept="all" onclick="selectFile();">
+              <input type="file" id="fileInput" name="file" accept="all" onchange="FormDataEvent">
             </div>
           </form>
         </div>

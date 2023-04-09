@@ -5,34 +5,19 @@
  * `contextIsolation` is turned on. Use the contextBridge API in `preload.js`
  * to expose Node.js functionality from the main process.
  */
-/** @jsx React.DOM */
-const { User, Bot } = require('./classes/User');
-require('./app.js');
-require('./classes/ChatMessage')
-const U = require('./classes/User');
-let dataStrings = {};
+const crypto = require('crypto');
+const secureKey = () => {
+    return new Promise((resolve, reject) => {
+        crypto.generateKey('hmac', { length: 256 }, (err, key) => {
+            if (err) {
+                return reject(err);
+            }
+            const secureKey = key.export().toString('hex');
+            resolve(secureKey);
+        });
+    });
+};
 
-// Receive data and add it to the corresponding command
-const dataTransfer = (command, data) => {
-    if (!dataStrings[command]) {
-        dataStrings[command] = [];
-    }
-    dataStrings[command].push(data);
-    processData(command);
-}
-
-// Process the data from the command
-function processData (command) {
-    const expectedStrings = 3;
-    let receivedStrings = dataStrings[command].length ? dataStrings[command].length : 0;
-
-    if (receivedStrings === expectedStrings) {
-        let jsonData = JSON.stringify(dataStrings[command]);
-        let options = JSON.parse(jsonData);
-        callApiGateway(options, command);
-        dataStrings[command] = [];
-    }
-}
 
 // This code listens for the resulting output from the formdata event.
 function showAlert(message) {
@@ -47,52 +32,63 @@ function showAlert(message) {
     };
 };
 
-const selectFile = (files) => {
-    const fileInput = document.querySelector('input[type="file"]');
-    if (fileInput instanceof HTMLInputElement) {
-        fileInput?.click();
-        await new Promise(resolve => fileInput?.addEventListener('change', resolve));
-        if (fileInput.files && fileInput.files.length > 0) {
-            dataTransfer(U.User.attachment, fileInput.files);
-        } else {
-            console.log('No files selected');
-        }
-    }
-};
-
 const formDataEvent = document.getElementById('formDataEvent');
 if (formDataEvent && formDataEvent.tagName === "FORM") {
     formDataEvent.addEventListener('submit', (event) => {
+        event.preventDefault();
         if (event.target instanceof HTMLFormElement) {
             const formData = new FormData(event.target);
-            dataTransfer(U.User.send, formData);
-            event.preventDefault();
-        }
+            const message = formData.get('message');
+            if (!formData) {
+                console.log("error 1");
+                console.log('Error: No data received')
+                return
+            }
+            const fileInput = document.querySelector('input[type="file"]');
+            if (fileInput instanceof HTMLInputElement) {
+                if (fileInput.files && fileInput.files.length > 0) {
+                    formData.append('file', fileInput.files[0]);
+                } else {
+                    console.log('Error: No data received');
+                }
+            } else {
+                console.log('No files selected');
+            }
+            processData(formData);
+        };
     });
 } else {
-    console.error('Form data event does not exist or is not a form element');
+    console.log('You must provide data to send a message');
 }
 
-function callApiGateway(options, command) {
-    try {
-        const bodyData = {};
-        if (options !== undefined) {
-            bodyData.message = message;
-        }
-        if (files !== undefined && files.length > 0) {
-            bodyData.files = files;
-        }
-        fetch('https://localhost:3000/api/gateway.js', {
-            method: 'POST',
-            body: JSON.stringify(bodyData),
-        }).then(response => {
-            if (response.ok) {
-                console.log('Data submitted successfully');
-            } else {
-                throw new Error('Server returned an error');
-            }
-        });
-    } catch (error) {
-        console.error(error);
+function processData (input) {
+    if (input.length < 1 || input.length > 2) {
+        console.log('Error: Invalid number of parameters passed');
+        return;
     }
+    let inputData = {
+        param1: input[0],
+    };
+    if (input.length === 2) {
+        inputData.param2 = input[1];
+    }
+    callApiGateway(inputData);
+}
+
+function callApiGateway (data) {
+    const HeaderHash = secureKey;
+    fetch('./api/gateway.js', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            '': HeaderHash,
+        },
+        body: JSON.stringify(data),
+    }).then(response => {
+        if (response.ok) {
+            console.log('Data submitted successfully');
+        } else {
+            throw new Error('Server returned an error');
+        }
+    }).catch(error => console.log('Fetch Error:', error));
 };

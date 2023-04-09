@@ -1,22 +1,23 @@
 const { uuidv4 } = require('../commands/uuidv4');
 const fU = require('../events/fileUpload');
-const { message } = require('../renderer');
 const { createCompletion, options } = require('../commands/createCompletion');
-const { ChatMessage } = require('../classes/ChatMessage')
-const e = require('express');
+const { ChatMessage } = require('../classes/ChatMessage');
+const message = document.getElementById('message');
+
 module.exports = {
     User: {
         nickname: "You",
         username: "Matthew",
         id: uuidv4(),
-        message: message,
-        attachment: {
-            file: fU.uploadToServer(),
-            attributes: fU.getAttributes(),
+        message: this.execute(),
+        execute (param1, param2 = undefined) {
+            new ChatMessage(this.username, param1)
+            const attachment = {
+                file: fU.uploadToServer(param2),
+                attributes: fU.getAttributes(param2),
+            };
+            return { attachment, param1 };
         },
-        send () {
-            new ChatMessage(this.username, this.message)
-        }
     },
     Bot: {
         nickname: "OpenAI",
@@ -33,6 +34,11 @@ module.exports = {
             new ChatMessage(this.username, this.message)
         }
     },
+    execute (param1, param2 = undefined) {
+        this.param1 = param1;
+        this.param2 = param2;
+        this.User.send();
+    },
     sendInfo (id, info) {
         this.id = id;
         switch (info) {
@@ -48,7 +54,6 @@ module.exports = {
                 return info;
         };
     },
-
 };
 
 // Create a new User object to represent the user/AI
