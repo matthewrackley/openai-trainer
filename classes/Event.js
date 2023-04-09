@@ -3,24 +3,24 @@ const hG = require('../events/hashGen');
 
 module.exports = {
     Execution: {
-        name: "Execution",
+        Execution: "Execution",
         path: path.resolve('../commands/'),
-        key: hG.GeneratedKey(this.name),
+        key: hG.keyGen().then((secureKey) => { return secureKey }).catch((err) => { return err }),
     },
     Occurence: {
         name: "Occurence",
         path: path.resolve("../events/"),
-        key: hG.GeneratedKey(this.name),
+        key: hG.keyGen().then((secureKey) => { return secureKey }).catch((err) => { return err }),
     },
     ClassCall: {
         name: "ClassCall",
         path: path.resolve("../classes/"),
-        key: hG.GeneratedKey(this.name),
+        key: hG.keyGen().then((secureKey) => { return secureKey }).catch((err) => { return err }),
     },
     ApiCall: {
         name: "ApiCall",
         path: path.resolve("../api/gateway.js"),
-        key: hG.GeneratedKey(this.name),
+        key: hG.keyGen().then((secureKey) => { return secureKey }).catch((err) => { return err }),
     },
     generateArray () {
         const arr = [];
@@ -44,4 +44,7 @@ module.exports = {
             return this.library;
         }
     },
+    execute (param1, param2) {
+
+    }
 };

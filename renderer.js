@@ -6,14 +6,14 @@
  * to expose Node.js functionality from the main process.
  */
 /** @jsx React.DOM */
-const { User, userClient, botClient } = require('./classes/User');
+const { User, Bot } = require('./classes/User');
 require('./app.js');
 require('./classes/ChatMessage')
-require('./classes/User')
+const U = require('./classes/User');
 let dataStrings = {};
 
 // Receive data and add it to the corresponding command
-function dataTransfer (command, data) {
+const dataTransfer = (command, data) => {
     if (!dataStrings[command]) {
         dataStrings[command] = [];
     }
@@ -23,7 +23,7 @@ function dataTransfer (command, data) {
 
 // Process the data from the command
 function processData (command) {
-    let expectedStrings = 3;
+    const expectedStrings = 3;
     let receivedStrings = dataStrings[command].length ? dataStrings[command].length : 0;
 
     if (receivedStrings === expectedStrings) {
@@ -35,7 +35,7 @@ function processData (command) {
 }
 
 // This code listens for the resulting output from the formdata event.
-const showAlert = (message) {
+function showAlert(message) {
     this.message = message;
     const modal = document.getElementById("modal");
     let p = document.getElementById("data");
@@ -47,12 +47,25 @@ const showAlert = (message) {
     };
 };
 
+const selectFile = (files) => {
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput instanceof HTMLInputElement) {
+        fileInput?.click();
+        await new Promise(resolve => fileInput?.addEventListener('change', resolve));
+        if (fileInput.files && fileInput.files.length > 0) {
+            dataTransfer(U.User.attachment, fileInput.files);
+        } else {
+            console.log('No files selected');
+        }
+    }
+};
+
 const formDataEvent = document.getElementById('formDataEvent');
 if (formDataEvent && formDataEvent.tagName === "FORM") {
     formDataEvent.addEventListener('submit', (event) => {
         if (event.target instanceof HTMLFormElement) {
             const formData = new FormData(event.target);
-            dataTransfer('sendMessage', formData);
+            dataTransfer(U.User.send, formData);
             event.preventDefault();
         }
     });
@@ -60,24 +73,7 @@ if (formDataEvent && formDataEvent.tagName === "FORM") {
     console.error('Form data event does not exist or is not a form element');
 }
 
-
-const selectFile(files) => {
-    const fileInput = document.querySelector('input[type="file"]');
-    if (fileInput instanceof HTMLInputElement) {
-        fileInput?.click();
-        await new Promise(resolve => fileInput?.addEventListener('change', resolve));
-        if (fileInput.files && fileInput.files.length > 0) {
-            dataTransfer('fileUpload', fileInput.files);
-        } else {
-            console.log('No files selected');
-        }
-    }
-};
-
-
-
-
-const callApiGateway = (options, command) => {
+function callApiGateway(options, command) {
     try {
         const bodyData = {};
         if (options !== undefined) {
@@ -100,5 +96,3 @@ const callApiGateway = (options, command) => {
         console.error(error);
     }
 };
-
-await processData(callApiGateway(options));

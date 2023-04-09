@@ -1,6 +1,7 @@
+const Event = require('../classes/Event')
 module.exports = {
-    name: Commands.keyGuarded,
-    key: 'checkType',
+    name: Event.Execution,
+    key: Event.Execution.key,
     execute (key, type) {
         if (key !== 'checkType') {
             return

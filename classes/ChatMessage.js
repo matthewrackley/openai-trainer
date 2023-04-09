@@ -1,5 +1,3 @@
-const app = require('../app');
-const { message } = require('../renderer');
 const U = require('../classes/User.js');
 const { error } = require('jquery');
 const chatBubble = document.getElementById('app');

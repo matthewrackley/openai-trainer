@@ -1,5 +1,4 @@
 const Event = require('../classes/Event');
-console.log(Event.getName());
 
 module.exports = {
     DB: class {
@@ -7,7 +6,7 @@ module.exports = {
             this.dbName = dbName;
             this.dbVersion = dbVersion;
         };
-        async saveSession (commandArray) {
+        async saveSession (sessionID, commandArray) {
             return new Promise((resolve, reject) => {
                 const request = indexedDB.open(this.dbName, this.dbVersion);
 
@@ -50,7 +49,6 @@ module.exports = {
             });
         }
     },
-    localDB: new this.DB('OpenAIDB', 1.05)
 };
 const gA = Event.generateArray();
 const sessionID =
@@ -61,7 +59,3 @@ const sessionID =
         .toString(36)
         .substring(2, 15);
 
-
-module.exports = {
-    Local: new DB("Local", 1.05),
-};
