@@ -41,7 +41,7 @@ server.listen(3000, () => {
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
 });
-app.post('/', (request, response) => {
+app.post('../', (request, response) => {
   const { param1, param2 = undefined } = request.body;
 
   U.execute(param1, param2);

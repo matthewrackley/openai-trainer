@@ -5,6 +5,7 @@ dotenv.config();
 const apiKey = process.env.OPENAI_API_KEY;
 const fs = require('fs');
 const path = require('path');
+const { showAlert } = require('./renderer');
 
 function checkFunctionsInFolder (folderPath) {
     fs.readdir(folderPath, (err, files) => {
@@ -29,7 +30,9 @@ let folderPath = [
     Event.Occurence.path
 ];
 checkFunctionsInFolder(folderPath);
-
+if (!apiKey) {
+    showAlert("Your OpenAI API Key is not set.\nPlease provide it below.")
+};
 
 
 path.relative('./', '../commands').replace(/(\.)*(\\)*(\/)*(js)*/g, '')

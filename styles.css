@@ -137,9 +137,10 @@ input[type="file"] {
     background-color: rgba(0,0,0,0.4);
 }
 .modal-content {
-    background-color: #FF0000;
+    background-color: #890c0c;
     margin: 15% auto;
     padding: 2rem;
+    font-size: larger;
     border: 1px solid #000;
     width: 80%;
 }

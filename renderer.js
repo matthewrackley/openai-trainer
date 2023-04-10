@@ -5,23 +5,9 @@
  * `contextIsolation` is turned on. Use the contextBridge API in `preload.js`
  * to expose Node.js functionality from the main process.
  */
-const crypto = require('crypto');
-const secureKey = () => {
-    return new Promise((resolve, reject) => {
-        crypto.generateKey('hmac', { length: 256 }, (err, key) => {
-            if (err) {
-                return reject(err);
-            }
-            const secureKey = key.export().toString('hex');
-            resolve(secureKey);
-        });
-    });
-};
 
-
-// This code listens for the resulting output from the formdata event.
+// This code shows an alert to the user.
 function showAlert(message) {
-    this.message = message;
     const modal = document.getElementById("modal");
     let p = document.getElementById("data");
     const span = document.getElementById("close");
@@ -29,59 +15,79 @@ function showAlert(message) {
         span.onclick = function () {
             modal.style.display = "none";
         };
-    };
+    }
+    if (p) {
+        p.textContent = message;
+        modal.style.display = "block";
+    }
 };
 
+// Handles the FormData that gets passed to the server.
 const formDataEvent = document.getElementById('formDataEvent');
-if (formDataEvent && formDataEvent.tagName === "FORM") {
-    formDataEvent.addEventListener('submit', (event) => {
-        event.preventDefault();
-        if (event.target instanceof HTMLFormElement) {
-            const formData = new FormData(event.target);
-            const message = formData.get('message');
-            if (!formData) {
-                console.log("error 1");
-                console.log('Error: No data received')
-                return
-            }
-            const fileInput = document.querySelector('input[type="file"]');
-            if (fileInput instanceof HTMLInputElement) {
-                if (fileInput.files && fileInput.files.length > 0) {
-                    formData.append('file', fileInput.files[0]);
-                } else {
-                    console.log('Error: No data received');
-                }
-            } else {
-                console.log('No files selected');
-            }
-            processData(formData);
-        };
-    });
+if (formDataEvent && formDataEvent.tagName !== "FORM") {
+    showAlert('You must provide data to send a message!');
 } else {
-    console.log('You must provide data to send a message');
-}
+    formDataEvent.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
 
-function processData (input) {
-    if (input.length < 1 || input.length > 2) {
-        console.log('Error: Invalid number of parameters passed');
-        return;
-    }
-    let inputData = {
-        param1: input[0],
-    };
-    if (input.length === 2) {
-        inputData.param2 = input[1];
-    }
-    callApiGateway(inputData);
-}
+        // Identifies the file that the user uploads.
+        const fileInput = document.querySelector('input[type="file"]');
 
-function callApiGateway (data) {
-    const HeaderHash = secureKey;
-    fetch('./api/gateway.js', {
+        // If the user uploads a file, assign it to param2
+        if (fileInput instanceof HTMLInputElement && fileInput.files.length > 0) {
+
+            // param1 is the Text input from FormData
+            const message = formData.get('param1');
+
+            // param2 is the File input from FormData
+            const file = fileInput.files[0];
+            formData.append('param2', file);
+            const files = formData.get('param2');
+
+            // Assign the values appropriately
+            let params = {
+                param1: message,
+                param2: files,
+            }
+
+            // If param1 doesn't exist, show an Alert to the user.
+            if (!params.param1) {
+                showAlert('Error: Missing required parameter "message"');
+                return;
+            }
+            try {
+                await callApiGateway(params);
+                console.log("Data submitted successfully");
+            } catch (error) {
+                showAlert(`Error submitting data: ${ error.message }`);
+            }
+
+        // If the user doesn't upload a file, only assign param1
+        } else {
+            const message = formData.get('param1');
+            let params = {
+                param1: message,
+            }
+            if (!params.param1) {
+                showAlert('Error: Missing required parameter "message"');
+                return;
+            }
+            try {
+                await callApiGateway(params);
+                console.log("Data submitted successfully");
+            } catch (error) {
+                showAlert(`Error submitting data: ${ error.message }`);
+            }
+        }
+    });
+};
+
+async function callApiGateway (data) {
+    await fetch('./api', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            '': HeaderHash,
         },
         body: JSON.stringify(data),
     }).then(response => {
