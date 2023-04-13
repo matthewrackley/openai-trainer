@@ -1,41 +1,106 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';" >
-    <link href="./styles.css" rel="stylesheet">
+    <meta id="CSP" http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+    <link href="styles.css" rel="stylesheet">
+    <link href="lib/bootstrap.css" rel="stylesheet">
+    <script nonce src="lib/bootstrap.js"></script>
+    <script nonce type="Module" src="./modules.js"></script>
     <title>Hello World!</title>
   </head>
+
   <body>
-    <div class="column">
-      <header>
-        <h1>OpenAI ChatApp!</h1>
-      </header>
-      <div id="modal" class="modal">
-          <div class="modal-content">
-              <span class="close" onclick="EventTarget">&times;</span>
-              <p id="data"></p>
-              <input id="APIKEY" autocomplete="off"><button for="APIKEY" type="submit">Submit</button>
+    <header>
+      <h1>OpenAI ChatApp!</h1>
+    </header>
+      <div class="sidebar">
+        <div class="d-flex flex-column flex-shrink-0 bg-light">
+          <a href="/" class="d-block p-3 link-dark text-decoration-none" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Icon-only">
+            <svg class="bi" width="40" height="32">
+              <use xlink:href="#bootstrap"></use>
+            </svg>
+            <span class="visually-hidden">Icon-only</span>
+          </a>
+          <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+            <li class="nav-item">
+              <a id="RAP" href="#" class="nav-link active py-3 border-bottom" aria-current="page" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+                  <img id="RAPP" src="svgs/rackp.svg" height="70px" width="70px" alt="Bootstrap"...>
+              </a>
+            </li>
+            <li>
+              <button type="button" class="btn btn-primary position-relative">
+                Profile</button>
+            </li>
+            <li>
+              <button type="button" class="btn btn-primary position-relative">
+                Shop!</button>
+            </li>
+            <li>
+                <button type="button" class="btn btn-primary position-relative">
+                  Inbox
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    1
+                    <span class="visually-hidden">unread messages</span>
+                  </span>
+            </li><br>
+            <li>
+              <button type="button" class="btn btn-primary position-relative">
+                <svg class="bi" width="24" height="24" role="img" aria-label="Customers">
+                  <img src="svgs/key.svg" alt="Bootstrap" ...>
+                </svg>
+                </button>
+            </li>
+          </ul>
+          <div class="dropdown border-top">
+            <a href="#" class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" class="rounded-circle">
+            </a>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
+              <li>
+                <a class="dropdown-item" href="#">New project...</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Settings</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Profile</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider" height="max-content">
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Sign out</a>
+              </li>
+            </ul>
           </div>
+        </div>
       </div>
       <div class="chat-area">
-        <div id="app"></div>
-      </div>
-      <footer>
-        <div class="column">
-          <form id="formDataEvent" action="#" onsubmit="FormDataEvent" >
-            <div class="row">
-              <input id="message" for="param1" autocomplete="off"><button type="submit" value="Submit">Send Message</button>
-            </div>
-            <div class="row">
-              <input type="file" for="file" id="fileInput" name="file" accept="all" onchange="FormDataEvent">
-            </div>
-          </form>
+        <div id="modal" class="modal-dialog modal-dialog-centered">
+          <p id="data"></p>
+            <input for="APIKEY" autocomplete="off" placeholder="sk-**************************************************************">
+            <button name="APIKEY" id="APIKEY" type="submit" onsubmit="setAPIkey()">Submit API Key</button>
+          </div>
+          <div id="app"></div>
         </div>
-      </footer>
-    </div>
-      <!-- You can also require other files to run in this process -->
-    <script src="./renderer.js"></script>
+      </div>
+    <footer>
+      <form id="formDataEvent" nonce action="#" onsubmit="FormDataEvent">
+        <div class="input-group">
+          <span class="input-group-text">Text Area</span>
+          <textarea id="message" name="param1" class="form-control" aria-label="With textarea"></textarea>
+          <button class="btn btn-success" nonce type="submit" value="Submit" onclick="EventTarget">Send Message</button>
+        </div>
+        <div class="input-group mb-3">
+          <input type="file" accept="all" name="param2" class="form-control" onchange="FormDataEvent" id="fileInput">
+          <label class="input-group-text" nonce for="fileInput" onclick="FormDataEvent">Upload</label>
+        </div>
+      </form>
+    </footer>
+  <!-- You can also require other files to run in this process -->
+    <script nonce src="./renderer.js"></script>
   </body>
 </html>

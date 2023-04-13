@@ -6,6 +6,10 @@ const path = require('path');
 async function uploadToServer (file) {
     const { name, path: filePath } = file;
     const resolvedPath = path.resolve('/var/www/html', name);
+    const stats = await fs.stat(filePath);
+    if (stats.size > 1024 * 1024 * 256) {
+        throw new Error("Total size is too large.\nAttachments must not exceed 256MB.");
+    }
     if (resolvedPath.includes("/")) {
         const directories = resolvedPath.split('/');
         directories.pop();
@@ -19,25 +23,9 @@ async function uploadToServer (file) {
             });
         }
     }
-    const stats = await fs.stat(filePath);
-    const data = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        if (typeof Blob !== 'undefined') {
-            reader.readAsBinaryString(file);
-        } else {
-            reader.readAsArrayBuffer(file);
-        }
-    });
-    if (typeof data === 'string') {
-        await fs.writeFile(resolvedPath, data, 'utf8');
-    } else if (data instanceof ArrayBuffer) {
-        await fs.writeFile(resolvedPath, Buffer.from(data));
-    } else {
-        throw new Error('Failed to write file: invalid data');
-    }
+    const data = await fs.readFile(filePath);
+    await fs.writeFile(resolvedPath, data, 'binary');
     console.log('Your files have been uploaded!');
-    return stats;
 };
 
 // Gets attributes from the uploaded files
@@ -51,7 +39,7 @@ async function getAttributes (filePath) {
         fileSize: stats.size,
     };
     if (stats.size > 1024 * 1024 * 256) {
-        throw new Error("Total size is too large!\nAttachments must not exceed 256MB!");
+        throw new Error("Total size is too large.\nAttachments must not exceed 256MB.");
     } else {
         return attributes;
     };

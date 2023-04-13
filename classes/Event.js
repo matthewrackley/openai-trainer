@@ -1,24 +1,32 @@
 const path = require('path');
 const hG = require('../events/hashGen');
 
-module.exports = {
+const Event = {
     Execution: {
-        Execution: "Execution",
+        call (var1, var2) {
+            //process some command here and return a value
+        },
         path: path.resolve('../commands/'),
-        key: hG.keyGen().then((secureKey) => { return secureKey }).catch((err) => { return err }),
+        key: hG.keyGen().then((secureKey) => { return secureKey }).catch((err) => { return err })
     },
     Occurence: {
-        name: "Occurence",
+        call (var1, var2) {
+            //process some command here and return a value
+        },
         path: path.resolve("../events/"),
         key: hG.keyGen().then((secureKey) => { return secureKey }).catch((err) => { return err }),
     },
     ClassCall: {
-        name: "ClassCall",
+        call (var1, var2) {
+            //process some command here and return a value
+        },
         path: path.resolve("../classes/"),
         key: hG.keyGen().then((secureKey) => { return secureKey }).catch((err) => { return err }),
     },
     ApiCall: {
-        name: "ApiCall",
+        call (var1, var2) {
+            //process some command here and return a value
+        },
         path: path.resolve("../api/gateway.js"),
         key: hG.keyGen().then((secureKey) => { return secureKey }).catch((err) => { return err }),
     },
@@ -34,17 +42,8 @@ module.exports = {
         }
         return arr;
     },
-    resolveLib (string) {
-        let libraryPath = path.join(this.rootdir, string);
-        if (this.library.includes(libraryPath)) {
-            console.error(`The library ${ libraryPath } already exists!`);
-            return this.library;
-        } else {
-            this.library.push(libraryPath);
-            return this.library;
-        }
-    },
-    execute (param1, param2) {
+};
 
-    }
+module.exports = {
+    Event
 };

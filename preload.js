@@ -5,6 +5,7 @@
  *
  * https://www.electronjs.org/docs/latest/tutorial/sandbox
  */
+const { AJAX, ajax } = require('./classes/AJAX.js');
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {
     const element = document.getElementById(selector)
@@ -29,5 +30,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 })
 
-const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const App = require('./app.js');
+module.exports = {
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  App: require('./app.js'),
+  ajax,
+  AJAX,
+};

@@ -1,13 +1,12 @@
 const { ChatMessage } = require('../classes/ChatMessage');
 const fU = require('../events/fileUpload');
+const U = require('../classes/User');
 
 module.exports = {
     execute (param1, param2 = undefined) {
-        new ChatMessage(this.username, param1);
+        new ChatMessage(U.User.username, param1);
         fU.uploadToServer(param2);
-        const attachment = {
-            attributes: fU.getAttributes(param2),
-        };
-        return { param1, attachment };
+        return U.Bot.send();
     },
+
 }

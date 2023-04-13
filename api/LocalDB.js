@@ -1,11 +1,19 @@
 const Event = require('../classes/Event');
 
+const sessionID =
+    Math.random()
+        .toString(36)
+        .substring(2, 15) +
+    Math.random()
+        .toString(36)
+        .substring(2, 15);
+
 class DB {
     constructor (dbName, dbVersion) {
-        this.dbName = dbName;
+        this.dbName = sessionID + dbName;
         this.dbVersion = dbVersion;
     };
-    async saveSession (sessionID, commandArray) {
+    async saveSession (commandArray) {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(this.dbName, this.dbVersion);
 
@@ -48,15 +56,10 @@ class DB {
         });
     }
 };
+const gA = Event.generateArray();
+const local = new DB('OpenAILocalDB', 1.05)
 module.exports = {
     Name: 'DB',
-    Local: new DB('OpenAILocalDB', 1.05),
-    sessionID:
-        Math.random()
-            .toString(36)
-            .substring(2, 15) +
-        Math.random()
-            .toString(36)
-            .substring(2, 15),
-    gA: Event.generateArray(),
+    local,
+    gA,
 };

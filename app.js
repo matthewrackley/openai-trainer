@@ -1,5 +1,5 @@
 const { Configuration, OpenAIApi } = require("openai");
-const Event = require('./classes/Event');
+const { Event } = require('./classes/Event');
 const dotenv = require("dotenv");
 dotenv.config();
 const apiKey = process.env.OPENAI_API_KEY;
@@ -32,15 +32,15 @@ checkFunctionsInFolder(folderPath);
 
 function showAlert (message) {
     const modal = document.getElementById("modal");
-    let p = document.getElementById("data");
+    const data = document.getElementById("data");
     const span = document.getElementById("close");
     if (modal && span) {
         span.onclick = function () {
             modal.style.display = "none";
         };
     }
-    if (p) {
-        p.textContent = message;
+    if (data) {
+        data.textContent = message;
         modal.style.display = "block";
     }
 };

@@ -41,9 +41,10 @@ app.on('window-all-closed', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-require('./app');
-require('./api/gateway');
-require('./api/LocalDB');
+const a = require('./app');
+const s = require('./api/gateway');
+const db = require('./api/LocalDB');
+db.Local.saveSession(db.gA);
 let nonce = window.crypto.getRandomValues(new Uint8Array(32)).join('').replace(/\//g, '_');
 sessionStorage.setItem('nonce', nonce);
 window.addEventListener("beforeunload", function (event) {
