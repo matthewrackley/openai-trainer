@@ -1,4 +1,4 @@
-const { uuidv4 } = require('../commands/uuidv4');
+const uuidv4 = require('../commands/uuidv4');
 const { createCompletion, options } = require('../commands/createCompletion');
 const { ChatMessage } = require('../classes/ChatMessage');
 const s = require('../api/gateway');

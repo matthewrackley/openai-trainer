@@ -5,34 +5,38 @@
  *
  * https://www.electronjs.org/docs/latest/tutorial/sandbox
  */
-const { AJAX, ajax } = require('./classes/AJAX.js');
+
+const Ajax = require('./classes/Ajax.js');
+const showAlert = require('./events/showAlert.js');
+const AJAX = new Ajax.default('http://192.168.0.1:5500', './api/gateway.js');
+
 window.addEventListener('DOMContentLoaded', () => {
-  const replaceText = (selector, text) => {
-    const element = document.getElementById(selector)
-    if (element) element.innerText = text
-  }
+    const replaceText = (selector, text) => {
+        const element = document.getElementById(selector);
+        if (element) element.innerText = text;
+    };
 
-  for (const type of ['chrome', 'node', 'electron']) {
-    replaceText(`${ type }-version`, process.versions[type])
-  }
+    for (const type of ['chrome', 'node', 'electron']) {
+        replaceText(`${ type }-version`, process.versions[type]);
+    }
 
 
 
-  let nonce = window.crypto.getRandomValues(new Uint8Array(32)).join('').replace(/\//g, '_');
-  sessionStorage.setItem('nonce', nonce);
-  window.addEventListener("beforeunload", function (event) {
-    sessionStorage.removeItem('nonce');
-  });
+    const nonce = window.crypto.getRandomValues(new Uint8Array(32)).join('').replace(/\//g, '_');
+    sessionStorage.setItem('nonce', nonce);
+    window.addEventListener('beforeunload', function(event) {
+        sessionStorage.removeItem('nonce');
+    });
 
-  let metaTag = document.createElement("meta");
-  metaTag.nonce = nonce;
-  document.head.appendChild(metaTag);
+    const metaTag = document.createElement("meta");
+    metaTag.nonce = nonce;
+    document.head.appendChild(metaTag);
 
-})
-
-module.exports = {
-  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  App: require('./app.js'),
-  ajax,
-  AJAX,
+});
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+const mod = {
+    timezone: timezone,
+    AJAX: AJAX,
+    showAlert: showAlert,
 };
+module.exports = mod;

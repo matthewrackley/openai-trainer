@@ -16,7 +16,7 @@ function createWindow () {
   mainWindow.loadFile('index.html')
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -41,11 +41,13 @@ app.on('window-all-closed', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-const a = require('./app');
-const s = require('./api/gateway');
-const db = require('./api/LocalDB');
-db.Local.saveSession(db.gA);
+require('./app');
+require('./api/gateway');
+const hG = require('./events/hashGen');
+const { local, gA } = require('./api/LocalDB');
+local.saveSession(gA);
 let nonce = window.crypto.getRandomValues(new Uint8Array(32)).join('').replace(/\//g, '_');
+hG.csp.apply();
 sessionStorage.setItem('nonce', nonce);
 window.addEventListener("beforeunload", function (event) {
   sessionStorage.removeItem('nonce');
