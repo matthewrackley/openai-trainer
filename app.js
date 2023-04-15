@@ -80,13 +80,13 @@ const sendMessage = async function (message) {
 const classesPath = path.join(__dirname, 'classes');
 const classesFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
-for (const file of classesFiles) {
-    const filePath = path.join(classesPath, file);
-    const _class = require(filePath);
-    if (classes.once) {
-        client.once(_class.name, (...args) => class._class(...args));
-    } else {
-        client.on(_class.name, (...args) => class._class(...args));
-    }
-}
+// for (const file of classesFiles) {
+//     const filePath = path.join(classesPath, file);
+//     const _class = require(filePath);
+//     if (classes.once) {
+//         client.once(_class.name, (...args) => class._class(...args));
+//     } else {
+//         client.on(_class.name, (...args) => class._class(...args));
+//     }
+// }
 

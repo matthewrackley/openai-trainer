@@ -6,9 +6,9 @@
  * https://www.electronjs.org/docs/latest/tutorial/sandbox
  */
 
-const Ajax = require('./classes/Ajax.js');
+const A = require('./classes/Ajax.js');
 const showAlert = require('./events/showAlert.js');
-const AJAX = new Ajax.default('http://192.168.0.1:5500', './api/gateway.js');
+const AJAX = new A.default('http://192.168.0.1:5500', './api/gateway.js');
 
 window.addEventListener('DOMContentLoaded', () => {
     const replaceText = (selector, text) => {

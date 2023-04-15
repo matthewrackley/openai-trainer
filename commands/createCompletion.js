@@ -1,12 +1,11 @@
 const { openai } = require('../app');
-let { message } = require('../renderer');
 const { ChatMessage } = require('../classes/ChatMessage');
 
 module.exports = {
-    createCompletion: async function (options) {
+    createCompletion: async (options) => {
         const response = await openai.createCompletion(options);
         openai.createCompletion(options);
-        return response
+        return response;
     },
     options (message) {
         let options = {

@@ -52,13 +52,14 @@ const gen = {
                     let script = gen.nonce();
                     return script;
                 default:
-                    show
-                    return;
+                    let nonce = gen.nonce();
+                    console.error('Invalid request. Returning nonce instead.');
+                    return nonce;
             }
         },
-        key(type, identifier) {
-            const key = await keyGen(type, identifier);
-            return key;
+        key: (type, identifier) =>  {
+            let { [identifier]: key } = gen.sec.key(type, identifier);
+            return ({ identifier: key });
         },
     },
     elements: function (method) {
@@ -66,7 +67,7 @@ const gen = {
             return;
         }
         if (method === 'css') {
-            const css = gen.sec('css');
+            const css = gen.sec.value('css');
             document.createAttribute('nonce').value = css;
             document.querySelectorAll('link[href]')
                 .forEach((el) => {
@@ -75,39 +76,41 @@ const gen = {
             return css;
         }
         if (method === 'script') {
-            const script = gen.sec('script');
+            const script = gen.sec.value('script');
             const scriptNonce = document.createAttribute('nonce').value = script;
             document.querySelectorAll('*[nonce]:not(link[href])')
                 .forEach((el) => {
                     el.setAttribute('nonce', script);
                 });
-            return script;
+            return scriptNonce;
         };
     },
 };
-};
 const headers = {
     http: 'http-equiv',
-    pol: 'Content-Security-Policy',
-    cont: 'content',
-    src: `default-src 'self'; style-src fonts.gstatic.com fonts.googleapis.com 'self' 'unsafe-inline' 'nonce-${ gen.elements('css')
+    cspV: 'Content-Security-Policy',
+    content: 'content',
+    source: `default-src 'self'; style-src fonts.gstatic.com fonts.googleapis.com 'self' 'unsafe-inline' 'nonce-${ gen.elements('css')
         }'; font-src fonts.gstatic.com fonts.googleapis.com; script-src 'self' 'nonce - ${ gen.elements('script') } ' 'strict - dynamic';`,
-    xattr: 'Content-Type-Options',
-    xval: `text/html; nosniff;`,
+    xAttr: 'Content-Type-Options',
+    xAttrV: `text/html; nosniff;`,
+    cookie: 'Set-Cookie',
+    cookieV: gen.sec.value('cookie'),
 };
 const csp = {
     id: document.getElementById('CSP'),
-    set: function (attr, data) {
+    set: (attr, data) => {
         csp.id.setAttribute(attr, data);
     },
-    apply () {
-        document.cookie = `nonce=${ encodeURIComponent(gen.sec('cookie')) }; HttpOnly; SameSite=None; Secure;`;
-        const secureCookie = document.cookie;
-        csp.set(headers.http, headers.pol);
-        csp.set(headers.cont, headers.src);
-        csp.set(headers.xattr, headers.xval);
-        return secureCookie;
-    },
+    apply: {
+        basic: () => {
+            document.cookie = `basicTracker=${ encodeURIComponent(gen.sec.key('hmac', 'UserTracker')) }; HttpOnly; SameSite=lax; Secure;`;
+            csp.set(headers.http, headers.pol);
+            csp.set(headers.cont, headers.src);
+            csp.set(headers.xattr, headers.xval);
+        },
+    }
 };
+
 
 module.exports = { keyGen, gen, headers, csp };

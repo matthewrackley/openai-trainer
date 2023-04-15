@@ -14,45 +14,32 @@ class Library {
 };
 const Event = {
     Execution: new Library('Execution', ['checkType', 'createCompletion', 'sendMessage', 'message', 'uuidv4'], '../commands/'),
-    Occurence: new Library('Occurence', ['fileUpload', 'hashGen'], '../events/'),
-    ClassCall: new Library('ClassCall', ['User', 'ChatMessage', 'AJAX'], '../classes/'),
-
-value.name = {[
-    value = variable,
-]}
-
-
-let param = {
-    _private: '',
-    set name (value) {
-        this._private = value;
-    }
+    Occurence: new Library('Occurence', ['ajaxRequest', 'cookies', 'showAlert', 'fileUpload', 'uriSwap', 'hashGen'], '../events/'),
+    ClassCall: new Library('ClassCall', ['User', 'ChatMessage', 'Ajax', 'Event', 'ReqHandler', 'userDB'], '../classes/'),
+    ApiCall: new Library('ApiCall', ['express', 'gateway', 'jsdocs', 'LocalDB', 'server'], '../apis/'),
 };
-param.name = [name];
-
-name = Event.Execution,
-name = Event.Occurence,
-name = Event.ClassCall,
-name = Event.ApiCall
-
 function execute (command) {
     command; // process the value passed to execute
 };
-
-console.log(execute);
-
-console.log(execute('BWAHAHA'));
-
-
-const newfunc = {
+const newFunc = {
     name: Event.Execution,
     nonce: hG.gen.nonce(),
-    key: Event.Execution.key,
-    execute (variable, key) {
-        this.key = key;
-        key = Event.Execution.key;
-}
+    key: await Event.Execution.key,
+    execute: (variable, key) => {
+        const
+        Event.Execution = () => await newFunc.execute(variable, key);
+            if (newFunc.key === key) {
+                execute(variable);
+            } else {
+                console.log('Invalid key');
+            };
+            key = Event.Execution.key;
+        };
+    },
+};
+console.log(newFunc.execute);
 
+console.log(execute('BWAHAHA'));
 const keyGen = hG.keyGen().then((secureKey) => { return secureKey }).catch((err) => { return err });
 return
 //let Event = new event(name, path, key);

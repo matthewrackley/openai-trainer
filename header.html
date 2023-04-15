@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta id="CSP" http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self' 'unsafe-inline'">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8; application/json;">
+    <link href="assets/headers.css" nonce rel="stylesheet">
+    <link href="lib/bootstrap.min.css" nonce rel="stylesheet">
+    <script nonce src="lib/jquery.min.js"></script>
+    <script nonce src="lib/bootstrap.min.js"></script>
+    <script nonce src="assets/auth.js"></script>
+    <script nonce src="renderer.js"></script>
+    <title>Hello World!</title>
+  </head>
+<!--- Below is the header ---->
+<header>
+<body id="nav" class="hero-anime">
+  <div class="navigation-wrap bg-light start-header start-style">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="navbar navbar-expand-md navbar-light">
+            <a class="navbar-brand" href="https://rackley.app/" target="_blank"><img src="asset/logo.png" alt=""></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto py-4 py-md-0">
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4 active">
+                  <a id="home" nonce class="nav-link" href="#" onclick="uriSwap(this.id);">Home</a>
+                </li>
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+                  <a id="about" nonce class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" onclick="uriSwap(this.id);">About Us</a>
+                  <div class="dropdown-menu">
+                    <a id="mission" nonce class="dropdown-item" href="javascript:void(0);" onclick="uriSwap(this.id)">Our Mission</a>
+                    <a id="values" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Our Values</a>
+                    <a id="support" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Get Help</a>
+                    <a id="creators" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Model Support</a>
+                  </div>
+                </li>
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+                  <a id="account" nonce class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" onclick="uriSwap(this.id);">My Account</a>
+                  <div class="dropdown-menu">
+                    <a id="forums" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Community</a>
+                    <a id="modeling" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Modeling</a>
+                    <a id="settings" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Settings</a>
+                  </div>
+                </li>
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+                  <a id="models" nonce class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" onclick="uriSwap(this.id);">Models</a>
+                  <div class="dropdown-menu">
+                    <a id="women" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Women</a>
+                    <a id="men" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Men</a>
+                    <a id="trans" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Trans</a>
+                  </div>
+                </li>
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+                  <a id="services" nonce class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" onclick="uriSwap(this.id);">Services</a>
+                  <div class="dropdown-menu">
+                    <a id="albums" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Photo Albums</a>
+                    <a id="subscriptions" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Subscriptions</a>
+                    <a id="camming" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Live Cams</a>
+                    <a id="customs" nonce class="dropdown-item" href="#" onclick="uriSwap(this.id);">Custom Content</a>
+                  </div>
+                </li>
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+                  <a id="store" nonce class="nav-link" href="#" onclick="uriSwap(this.id);">Shop</a>
+                </li>
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+                  <a id="contact" nonce class="nav-link" href="#" onclick="uriSwap(this.id);">Contact Us</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</header>
+
+
+<!----- Login Module ------>
+
+
+<div class="section">
+  <div class="container">
+    <div class="row full-height justify-content-center">
+      <div class="col-12 text-center align-self-center py-5">
+        <div class="section pb-5 pt-5 pt-sm-2 text-center">
+          <h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6>
+          <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" .../>
+          <label for="reg-log"></label>
+          <div class="card-3d-wrap mx-auto">
+            <div class="card-3d-wrapper">
+              <div class="card-front">
+                <div class="center-wrap">
+                  <div class="section text-center">
+                    <h4 class="mb-4 pb-3">Log In</h4>
+                    <div class="form-group">
+                      <input type="text" name="logusername" class="form-style" placeholder="Your Username" id="logusername" autocomplete="off">
+                      <i class="input-icon uil uil-user"><img draggable="false" src="assets/person-circle.svg" is="icon"></i>
+                    </div>
+                    <div class="form-group mt-2">
+                      <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
+                      <i class="input-icon uil uil-lock-alt"><img draggable="false" src="assets/lock.svg" is="icon"></i>
+                    </div>
+                    <a href="#" class="btn mt-4">submit</a>
+                    <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-back">
+                <div class="center-wrap">
+                  <div class="section text-center">
+                    <h4 class="mb-4 pb-3">Sign Up</h4>
+                    <div class="form-group">
+                      <input type="text" oninput="verify(HTMLInputElement)" name="logusername" class="form-style" placeholder="Your Username" id="logusername" autocomplete="off">
+                      <i class="input-icon uil uil-user"><img draggable="false" src="assets/person-circle.svg" is="icon"></i>
+                    </div>
+                    <div class="form-group mt-2">
+                      <input type="text" name="logfirstname" class="form-style" placeholder="Your First Name" id="logfirstname" autocomplete="off">
+                      <i class="input-icon uil uil-user"><img draggable="false" src="assets/person-bounding-box.svg" is="icon"></i>
+                    </div>
+                    <div class="form-group mt-2">
+                      <input type="text" name="loglastname" class="form-style" placeholder="Your Last Name" id="loglastname" autocomplete="off">
+                      <i class="input-icon uil uil-user"><img draggable="false" src="assets/person-bounding-box.svg" is="icon"></i>
+                    </div>
+                    <div class="form-group mt-2">
+                      <input type="email" oninput="verify(HTMLInputElement)" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
+                      <i class="input-icon uil uil-at"><img draggable="false" src="assets/envelope-fill.svg" is="icon"></i>
+                    </div>
+                    <div class="form-group mt-2">
+                      <input type="password" oninput="passSec(HTMLInputElement) " name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
+                      <i class="input-icon uil uil-lock-alt" ><img draggable="false" src="assets/lock.svg" is="icon"></i>
+                    </div>
+                    <a href="#" class="btn mt-4">submit</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Link to page
+================================================== -->
+
+<link href="index.html" rel="canonical">
+
+</html>
