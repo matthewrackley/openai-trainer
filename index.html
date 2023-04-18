@@ -5,31 +5,31 @@
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta id="CSP" http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
-    <link href="styles.css" rel="stylesheet">
-    <link href="lib/bootstrap.css" rel="stylesheet">
-    <script nonce src="lib/bootstrap.js"></script>
+    <link href="lib/css/styles.css" rel="stylesheet">
+    <link href="lib/bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="lib/jquery/jquery-ui.css" rel="stylesheet">
+
+    <script nonce src="lib/jquery/jquery.js"></script>
+    <script nonce src="lib/jquery/jquery-ui.js"></script>
+    <script nonce src="lib/bootstrap/bootstrap.js"></script>
     <script nonce type="Module" src="./modules.js"></script>
     <title>Hello World!</title>
   </head>
-
   <body>
-    <header>
-      <h1>OpenAI ChatApp!</h1>
-    </header>
-      <div class="sidebar">
-        <div class="d-flex flex-column flex-shrink-0 bg-light">
-          <a href="/" class="d-block p-3 link-dark text-decoration-none" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Icon-only">
-            <svg class="bi" width="40" height="32">
-              <use xlink:href="#bootstrap"></use>
-            </svg>
-            <span class="visually-hidden">Icon-only</span>
+    <header class="header row" id="main">
+      <button id="imgcontainer" type="button" class="btn btn-primary position-relative">
+        <svg class="bi" width="40" height="32">
+          <a id="RAP" href="#home" class="nav-link active py-3 border-bottom" aria-current="page" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+            <img id="RAPP" src="lib/logo/colorlogo.png" alt="Rackley.app" ...>
           </a>
+        </svg>
+      </button>
+    <h1 id="header">OpenAI ChatApp!</h1>
+    </header>
+    <div class="row" id="centerrow">
+      <div class="sidebar">
+        <div id="sidebar-content" class="d-flex flex-column flex-shrink-0 bg-light">
           <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
-            <li class="nav-item">
-              <a id="RAP" href="#" class="nav-link active py-3 border-bottom" aria-current="page" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
-                  <img id="RAPP" src="svgs/rackp.svg" height="70px" width="70px" alt="Bootstrap"...>
-              </a>
-            </li>
             <li>
               <button type="button" class="btn btn-primary position-relative">
                 Profile</button>
@@ -49,14 +49,14 @@
             <li>
               <button type="button" class="btn btn-primary position-relative">
                 <svg class="bi" width="24" height="24" role="img" aria-label="Customers">
-                  <img src="svgs/key.svg" alt="Bootstrap" ...>
+                  <img src="assets/images/key.svg" alt="OpenAI API Key" >
                 </svg>
                 </button>
             </li>
           </ul>
           <div class="dropdown border-top">
             <a href="#" class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" class="rounded-circle">
+              <img src="lib/images/wrench-adjustable.svg" alt="mdo" width="24" height="24" class="rounded-circle">
             </a>
             <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
               <li>
@@ -78,28 +78,34 @@
           </div>
         </div>
       </div>
-      <div class="chat-area">
-        <div id="modal" class="modal-dialog modal-dialog-centered">
-          <p id="data"></p>
+      <div class="column" id="chatcolumn">
+        <div id="chat-area" class="chat-area resizable">
+          <div id="modal" class="modal-dialog modal-dialog-centered">
+            <p id="data"></p>
             <input for="APIKEY" autocomplete="off" placeholder="sk-**************************************************************">
             <button name="APIKEY" id="APIKEY" type="submit" onsubmit="setAPIkey()">Submit API Key</button>
           </div>
           <div id="app"></div>
         </div>
+        <form class="row resizable" id="formDataEvent" nonce action="#" onsubmit="FormDataEvent">
+          <textarea id="message" name="message" class="form-control resizable" aria-label="With textarea"></textarea>
+          <div class="column resizable" id="options1">
+            <div class="input-group mb-3">
+              <input type="file" accept="all" name="file" class="form-control" onchange="FormDataEvent" nonce id="fileInput">
+            </div>
+          </div>
+          <div class="column resizable" id="options2">
+            <div id="tempinput" class="input-group mb-3">
+              <div class="form-label-item">
+                <label class="form-label" for="temperature" aria-label="Temp">Temperature:</label><div class="invisible">&#8192</div><output for="temperature" id="tempvalue"></output>
+              </div>
+              <input name="temperature" min="0.0" max="2.0" value="1.5" step="0.1" type="range" class="form-range" id="temperature">
+            </div>
+            <button for="formDataEvent" class="btn btn-warning" nonce type="submit" value="Submit" onclick="EventTarget">Send Message</button>
+          </div>
+        </form>
       </div>
-    <footer>
-      <form id="formDataEvent" nonce action="#" onsubmit="FormDataEvent">
-        <div class="input-group">
-          <span class="input-group-text">Text Area</span>
-          <textarea id="message" name="param1" class="form-control" aria-label="With textarea"></textarea>
-          <button class="btn btn-success" nonce type="submit" value="Submit" onclick="EventTarget">Send Message</button>
-        </div>
-        <div class="input-group mb-3">
-          <input type="file" accept="all" name="param2" class="form-control" onchange="FormDataEvent" id="fileInput">
-          <label class="input-group-text" nonce for="fileInput" onclick="FormDataEvent">Upload</label>
-        </div>
-      </form>
-    </footer>
+    </div>
   <!-- You can also require other files to run in this process -->
     <script nonce src="./renderer.js"></script>
   </body>

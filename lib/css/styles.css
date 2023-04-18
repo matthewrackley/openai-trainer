@@ -1,0 +1,449 @@
+/* styles.css */
+
+/* Add styles here to customize the appearance of your app */
+
+:root {
+    background-color:steelblue;
+    --msgheight: var(--formheight);
+    --msgwidth: var(--contwidth);
+    --optionwidth: 20%;
+    --rootheight: 100vh;
+    --rootwidth: 100vw;
+    --headerheight: 10%;
+    --centerrowheight: 90%;
+    --centerrowwidth: 100%;
+    --sidebarwidth: 10%;
+    --height: 80%;
+    --formheight: 20%;
+    --formwidth: 100%;
+}
+html:root {
+    height: 100%;
+    background-color:steelblue;
+}
+div.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem;
+}
+body {
+    color: #000000;
+    background-color:steelblue!important;
+    text-align: center;
+    align-self: center;
+    overflow: hidden;
+    margin: 0;
+    height: var(--rootheight);
+}
+h1#header {
+    display: block;
+    position: fixed;
+    width: var(--rootwidth);
+    color:steelblue;
+    text-align: center;
+    line-height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #FF0045;
+    text-align: center;
+    align-self: center;
+}
+header#main {
+    color: steelblue;
+    width: var(--rootwidth);
+    height: var(--headerheight);
+    background-color: #ffffff;
+    text-align: center;
+    margin:inherit;
+    /* margin-bottom: 1rem; */
+    position: sticky;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-wrap: nowrap;
+    z-index: 2;
+}
+button#imgcontainer {
+    height: 100%;
+    width: 8%;
+    display: flex;
+    left: 1rem;
+    place-items: center;
+}
+#centerrow {
+    background-color: steelblue;
+    width: var(--rootwidth);
+    flex-direction: column;
+    height: var(--centerrowheight);
+    margin-top: -1px;
+}
+div.sidebar{
+    display: flex;
+    justify-content: center;
+    width: var(--sidebarwidth);
+    height: 100%;
+    padding: 0.10rem;
+    position: relative;
+    place-items: baseline;
+    background-color: #0000004c;
+}
+div#sidebar-content {
+    width: 100%;
+    position: relative;
+    height: 100%;
+    padding-top: 1rem;
+}
+div.column#chatcolumn {
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+    margin: 0.25rem;
+    padding: 0.25rem;
+    --workingwidth: calc(var(--rootwidth) - var(--sidebarwidth));
+    width: calc(var(--rootwidth) - var(--sidebarwidth)); /** 90% - chatcolumn */
+    --workingheight: calc(var(--rootheight) - var(--headerheight));
+    height: 100%; /** 100% - chatcolumn */
+    flex-shrink: 0;
+}
+div#chat-area {
+    display: flex;
+    background-color: #4f4f4f;
+    justify-content: space-around;
+    border:solid;
+    border-radius: 15px;
+    border-width: 2px;
+    border-color: #FFFFFF30;
+    --chatheight: calc(var(--rootheight) - calc(var(--headerheight) * 3));
+    height: var(--height); /** 80% - chatarea */
+    --chatwidth: var(--workingwidth); /** 100% - chatarea */
+    place-items: center;
+    margin: 0.25rem;
+    padding: 0.25rem;;
+    resize: vertical;
+    overflow: auto;
+    flex-shrink: 9;
+}
+form#formDataEvent{
+    display: flex;
+    height: var(--formheight);
+    width: var(--formwidth); /** 100% - form */
+    flex-direction: row;
+    padding: 0.25rem;
+    margin: 0.25rem;
+    min-height: 20%;
+    overflow: visible;
+    max-height: 100%;
+    resize: vertical;
+    flex-grow: 1;
+}
+#message {
+    --msgwidth: calc(80% - var(--optionwidth)); /** 60% - msg */
+    --msgheight: calc(var(--workingheight) - var(--formheight)); /** 80% - msg */
+    width: var(--msgwidth);
+    height: var(--formheight); /** 100% - message */
+    min-width: 60%;
+    max-width: 80%;
+    min-height: 100%;
+    resize: both;
+    overflow: visible;
+    z-index: 1;
+}
+div#options1 {
+    min-width: 10%;
+    max-width: var(--optionwidth);
+    min-height: 100%;
+}
+
+div#options2 {
+    display: flex;
+    flex-direction: column;
+    min-width: 5%;
+    max-width: var(--optionwidth);
+    min-height: 100%;
+}
+label[for="temperature"] {
+    display: inline;
+    place-self: center;
+    margin-bottom: 0rem !important;
+}
+div#tempinput {
+    width: 50%;
+    place-content: space-between;
+}
+input#temperature {
+    color: blue;
+}
+button[for="formDataEvent"] {
+    height: 25%;
+    width: 50%;
+}
+img {
+    position: relative;
+    right: 0.75rem;
+}
+a {
+    color: #000;
+}
+div#app {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    align-self: start;
+}
+a.nav-link.active.py-3.border-bottom {
+    position: relative;
+    z-index: 1;
+}
+
+hr.dropdown-divider {
+    height:auto;
+}
+.nav {
+    height: 100vh;
+    display: initial;
+}
+.py-3 {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+.nav-link {
+    display: initial;
+}
+img#RAPP {
+    height: 100px;
+    width: auto;
+    top: 0;
+    left: 0;
+}
+ul#messages {
+    display: contents;
+    width: fit-content;
+    height: auto;
+    position: fixed;
+}
+.d-flex.flex-column.flex-shrink-0.bg-light {
+    z-index: 1;
+}
+a#RAP {
+    width: 100%;
+    height: 10%;
+    margin-bottom: 1rem;
+}
+
+input {
+    width: 100%;
+    height: auto;
+}
+button {
+    width: 10%;
+    height: auto;
+    display: block;
+}
+li {
+    display: inline-table;
+    box-sizing: content-box;
+    padding-bottom: 0.5rem;
+}
+.btn-primary {
+    width: 70%;
+    height: 50%;
+    display:block;
+}
+input[type="file"] {
+    width: 30%;
+    height: auto;
+    display: block;
+}
+
+.input-group {
+    background-color: steelblue;
+}
+span.input-group-text,
+label.input-group-text {
+    color: #FFF;
+    background-color: #157347;
+    border-color: #146c43;
+}
+
+
+#APIKEY,
+[for="APIKEY"],
+.modal-dialog-centered#modal {
+    display: none;
+    color: #FFF;
+    background-color: #ec160085;
+    place-self: center;
+    position: absolute;
+    z-index: 1;
+    float: center;
+    width: 25vw;
+    min-height: auto;
+    height: 20vh;
+    border: solid;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+
+.close {
+    color: #FFF;
+    float: right;
+    font-size:1rem;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration:none;
+    cursor: pointer;
+}
+
+div.Message#userClient {
+    display: flex;
+    align-self: self-start;
+    position: fixed;
+    width: 100%;
+}
+div.Message#Matthew {
+    display: flex;
+    align-self: self-end;
+    position: fixed;
+    width: 100%;
+}
+div.ChatBubble#OpenAI {
+    display: block;
+    padding: 8px;
+    margin: 8px;
+    border: #000;
+    border-style: solid;
+    color: #000;
+    background-color: #FFF;
+}
+div.ChatBubble#userClient {
+    display: block;
+    padding: 8px;
+    margin: 8px;
+    border: #000;
+    border-style: solid;
+    color: #000;
+    background-color: coral;
+}
+div.message {
+    display: contents;
+    text-align: left;
+}
+input#APIKEY {
+    width: 100%;
+    height: auto;
+    display: none;
+}
+button[for="APIKEY"] {
+    width: 25%;
+    height: auto;
+    display: none;
+}
+button {
+    border-radius: 0.5rem
+}
+.p {
+    text-align: center;
+}
+output {
+    place-self: center;
+}
+button.btn.btn-warning {
+    background-color: darkorange !important;
+    border-color: #aa6600 !important;
+}
+div.form-label-item {
+    border-radius: 0.5rem !important;
+    background-color: darkorange;
+    width: 100%;
+    height: 70%;
+    place-content: center;
+    display: flex;
+    padding: 0.25rem;
+}
+button.btn.btn-warning:hover {
+    background-color: #ffb444 !important;
+    border-color: #fff444 !important;
+}
+button.btn.btn-warning:active {
+    background-color: #157347 !important;
+    border-color: #0b9d1e !important;
+    box-shadow: 0 0 0 0.25rem #0b9d1e50;
+}
+div.invisible {
+    display: contents;
+}
+.form-range::-moz-range-thumb {
+    background-color: darkorange !important;
+    box-shadow: 0 0 0 1px #000000
+}
+.resizable {
+    width: 100%;
+    height: 100%;
+    resize: both;
+    overflow: auto;
+}
+
+
+/**
+    *  @author Matthew
+    *  @version 1.0
+    *  @since 2021-05-01
+    *  @see
+    *  AI - verification: https://www.openai.com/blog/openai-api/
+        The math in the CSS code is as follows: --msgheight: 18%;
+        --optionwidth: 20%;
+        --rootheight: 100%;
+        --rootwidth: 100%;
+        --headerheight: 10%;
+        --centerrowheight: 90%;
+        --centerrowwidth: 100%;
+        --sidebarwidth: 10%;
+
+        --workingwidth: calc(var(--rootwidth) - var(--sidebarwidth)); // 90%
+        --workingheight: calc(var(--rootheight) - var(--headerheight)); // 100%
+        --chatheight: calc(var(--workingheight) - var(--formheight)); // 80%
+        --chatwidth: var(--workingwidth); // 100%
+        --formheight: var(--msgheight); // 18%
+        --formwidth: var(--workingwidth); // 100%
+        --contwidth: calc(var(--workingwidth) - calc(var(--optionwidth) * 2)); // 60%
+        --contheight: calc(var(--workingheight) - var(--formheight)); // 80%
+        --msgwidth: var(--contwidth); // 60%
+
+        In pixels,
+        the max height for a 2560px x 1440px monitor would be: --msgheight: 432px;
+        --optionwidth: 512px;
+        --rootheight: 1440px;
+        --rootwidth: 2560px;
+        --headerheight: 144px;
+        --centerrowheight: 1296px;
+        --centerrowwidth: 2560px;
+        --sidebarwidth: 256px;
+
+        --workingwidth: 2304px;
+        --workingheight: 1440px;
+        --chatheight: 1152px;
+        --chatwidth: 2304px;
+        --formheight: 432px;
+        --formwidth: 2304px;
+        --contwidth: 1536px;
+        --contheight: 1152px;
+        --msgwidth: 1536px;
+
+        Yes,
+        the CSS fills the screen and it all validates.
+    */

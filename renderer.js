@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * This file is loaded via the <script> tag in the index.html file and will
  * be executed in the renderer process for that window. No Node.js APIs are
@@ -6,7 +7,9 @@
  * to expose Node.js functionality from the main process.
  */
 
-const { AJAX, timezone, showAlert } = require("./preload");
+
+
+// const { AJAX, timezone, showAlert } = require("./preload");
 // Set a nonce to correctly guard webapp
 
 // This code shows an alert to the user.
@@ -19,85 +22,158 @@ const { AJAX, timezone, showAlert } = require("./preload");
 //         modal.style.display = "block";
 //     }
 // };
-function setAPIkey () {
-    const modal = document.getElementById("modal");
-    const data = document.getElementById("data");
-    const APIKEY = document.getElementById('APIKEY');
 
-    if (data) {
-        data.textContent = "You must provide your API key to use this feature!";
-        modal.style.display = "block";
-        APIKEY.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            // @ts-ignore
-            const formData = new FormData(event.target);
-            const key = formData.get('APIKEY').toString();
-            if (!key) {
-                showAlert('You must provide your API key to use this feature!');
-                return;
+
+
+
+
+// function setAPIkey () {
+//     const modal = document.getElementById("modal");
+//     const data = document.getElementById("data");
+//     const APIKEY = document.getElementById('APIKEY');
+
+//     if (data) {
+//         data.textContent = "You must provide your API key to use this feature!";
+//         modal.style.display = "block";
+//         APIKEY.addEventListener('submit', async (event) => {
+//             event.preventDefault();
+//             // @ts-ignore
+//             const formData = new FormData(event.target);
+//             const key = formData.get('APIKEY').toString();
+//             if (!key) {
+//                 showAlert('You must provide your API key to use this feature!');
+//                 return;
+//             }
+//             sessionStorage.setItem('OPENAI_API_KEY', key);
+//             modal.style.display = "none";
+//             return;
+//         });
+//     }
+// };
+
+const tempvalue = document.querySelector('#tempvalue')
+const temperature = document.querySelector('#temperature')
+tempvalue.textContent = temperature.value;
+temperature.addEventListener("input", (event) => {
+    tempvalue.innerHTML = event.target.value;
+});
+
+var chatHt = document.querySelector('#chatht');
+var ht = getComputedStyle(document.querySelector(':root'));
+let formHt = ht.getPropertyValue('--formheight');
+
+
+$(".selector").resizable({
+    alsoResize: "#mirror"
+});
+
+
+
+function downHandler (ev) {
+    const mouse = document.getElementById('message');
+    // Element 'target' will receive/capture further events
+    mouse.setPointerCapture(ev.mouseId);
+
+    let ourheight = document.getElementById('message').style.height; // NULL
+    let height = ht.getPropertyValue('--height'); // 80% starting value
+    let width = document.getElementById('message').style.width.; // NULL
+    let pointerCap = mouse.hasPointerCapture(ev.mouseId);
+    if (pointerCap) {
+        mouse.onpointermove = (ev) => {
+            ev.preventDefault();
+            while (true) {
+                ev.clientX = mouse.style.width; // CURRENT POINTER POSITION
+                ev.width = mouse.style.width = ev.clientX; // +1 increase
+                ev.height = mouse.style.height = ev.clientY; // +1 increase
+                ht.setProperty('--chatheight', ev.height);
+                ht.setProperty('--msgwidth', ev.width);
             }
-            sessionStorage.setItem('OPENAI_API_KEY', key);
-            modal.style.display = "none";
-            return;
-        });
+        }
+    } else {
+        return
     }
-};
+}
 
+
+
+const mouseEvent = document.getElementById("message");
+mouseEvent.onpointerdown = downHandler;
+
+
+
+
+// chatHt.addEventListener('change', (event) => {
+//     var dimensions = getComputedStyle(':root').getPropertyValue('--formheight'); // dimensions of the css :root element
+//     // --msgwidth, --formheight and --chatheight are variables in the css file
+
+//     getComputedStyle(ht).setProperty('--msgheight', '100%')
+// }
+
+// // Create a function for setting a variable value
+// function myFunction_set () {
+//     // Set the value of variable --blue to another value (in this case "lightblue")
+//     r.style.setProperty('--blue', 'lightblue');
+// }
 // Handles the FormData that gets passed to the server.
-const formDataEvent = document.getElementById('formDataEvent');
-const form = document.querySelector(#formDataEvent);
-if (formDataEvent && formDataEvent.tagName !== "FORM") {
-    showAlert('You must provide data to send a message!');
-} else {
-    formDataEvent.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        // @ts-ignore
-        const formData = new FormData(event.target);
-        const message = formData.get('param1');
-        if (!message) {
-            showAlert('Error: Missing required parameter "message"');
-            return;
-        }
-        // Determine whether a file was uploaded, and if so, add it to the form data.
-        const fileInput = formData.get('param2');
-        if (fileInput instanceof File && fileInput.size > 0) {
-            let params = {
-                param1: message,
-                param2: fileInput,
-            };
-            try {
-                await callApiGateway(params, secureCookie);
-                form.reset();
-                console.log("Params submitted.");
-            } catch (error) {
-                showAlert(`Error submitting data: ${ error.message }`);
-            }
+// const formDataEvent = document.getElementById('formDataEvent');
+// const form = document.querySelector('#formDataEvent');
+// if (formDataEvent && formDataEvent.tagName !== "FORM") {
+//     showAlert('You must provide data to send a message!');
+// } else {
+//     formDataEvent.addEventListener('submit', async (event) => {
+//         event.preventDefault();
+//         // @ts-ignore
+//         const formData = new FormData(event.target);
+//         const message = formData.get('param1');
+//         if (!message) {
+//             showAlert('Error: Missing required parameter "message"');
+//             return;
+//         }
+//         // Determine whether a file was uploaded, and if so, add it to the form data.
+//         const fileInput = formData.get('param2');
+//         if (fileInput instanceof File && fileInput.size > 0) {
+//             let params = {
+//                 param1: message,
+//                 param2: fileInput,
+//             };
+//             try {
+//                 await callApiGateway(params, secureCookie);
+//                 form.reset();
+//                 console.log("Params submitted.");
+//             } catch (error) {
+//                 showAlert(`Error submitting data: ${ error.message }`);
+//             }
 
-        // If the user doesn't upload a file, only assign param1
-        } else {
-            let params = {
-                param1: message,
-                param2: undefined,
-            }
-            try {
-                await callApiGateway(params, secureCookie);
-                form.reset();
-                console.log("Params submitted.");
-            } catch (error) {
-                showAlert(`Error submitting data: ${ error.message }`);
-            }
-        }
-    });
-};
+//         // If the user doesn't upload a file, only assign param1
+//         } else {
+//             let params = {
+//                 param1: message,
+//                 param2: undefined,
+//             }
+//             try {
+//                 await callApiGateway(params, secureCookie);
+//                 form.reset();
+//                 console.log("Params submitted.");
+//             } catch (error) {
+//                 showAlert(`Error submitting data: ${ error.message }`);
+//             }
+//         }
+//     });
+// };
 
-module.exports = {
-    uriSwap: (docID) => {
-        let Uri = AJAX.gen.defaultUri(docID);
-        window.history.replaceState({}, 'unused', Uri);
-        window.location.href = Uri;
-        return Uri;
-    },
-};
+// module.exports = {
+//     uriSwap: (docID) => {
+//         let Uri = AJAX.gen.defaultUri(docID);
+//         window.history.replaceState({}, 'unused', Uri);
+//         window.location.href = Uri;
+//         return Uri;
+//     },
+// };
+
+
+
+
+
 //     document.getElementById(docID).addEventListener("click", function (event) {
 //         event.preventDefault(); // prevent the default behavior of the link
 //         var xhr = new XMLHttpRequest(); // create a new AJAX request
@@ -120,6 +196,10 @@ module.exports = {
 //     });
 // };
 
+
+
+
+
 // async function callApiGateway (data, cookie) {
 //     const { param1, param2 } = data;
 //     await fetch('http://192.168.0.155:5500/api/gateway.js', {
@@ -140,31 +220,43 @@ module.exports = {
 
 
 
-const postRequest = http.request(postOptions, (res) => {
-    const response = {
-        method: 'POST',
-        url: '/index.html',
-        headers: {
-            cookie: res.headers['set-cookie'],
-        },
-        on: (eventName, callback) => {
-            if (eventName === 'data') {
-                callback(postData);
-            }
-            if (eventName === 'end') {
-                callback();
-            }
-        },
-    };
-    RequestHandler.callApiGateway(response, res.headers['set-cookie']);
-});
 
-postRequest.on('error', (error) => {
-    console.error(`POST request error: ${ error.message }`);
-});
 
-postRequest.write(postData);
-postRequest.end();
+
+
+// const postRequest = http.request(postOptions, (res) => {
+//     const response = {
+//         method: 'POST',
+//         url: '/index.html',
+//         headers: {
+//             cookie: res.headers['set-cookie'],
+//         },
+//         on: (eventName, callback) => {
+//             if (eventName === 'data') {
+//                 callback(postData);
+//             }
+//             if (eventName === 'end') {
+//                 callback();
+//             }
+//         },
+//     };
+//     RequestHandler.callApiGateway(response, res.headers['set-cookie']);
+// });
+
+
+
+
+
+// postRequest.on('error', (error) => {
+//     console.error(`POST request error: ${ error.message }`);
+// });
+
+
+
+
+
+// postRequest.write(postData);
+// postRequest.end();
 
 
 
