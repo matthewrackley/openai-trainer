@@ -63,28 +63,27 @@ var ht = getComputedStyle(document.querySelector(':root'));
 let formHt = ht.getPropertyValue('--formheight');
 
 
-$(".selector").resizable({
-    alsoResize: "#mirror"
+$("#message").resizable({
+    alsoResize: "#chat-area"
 });
-
+    // let ourheight = document.getElementById('message').style.height; // NULL
+    // let height = ht.getPropertyValue('--height'); // 80% starting value
+    // let width = document.getElementById('message').style.width.; // NULL
 
 
 function downHandler (ev) {
-    const mouse = document.getElementById('message');
-    // Element 'target' will receive/capture further events
-    mouse.setPointerCapture(ev.mouseId);
+    const mouse = document.getElementById('resizeIt');
+    mouse.setPointerCapture(ev.pointerId);
 
-    let ourheight = document.getElementById('message').style.height; // NULL
-    let height = ht.getPropertyValue('--height'); // 80% starting value
-    let width = document.getElementById('message').style.width.; // NULL
-    let pointerCap = mouse.hasPointerCapture(ev.mouseId);
+    let pointerCap = mouse.hasPointerCapture(ev.pointerId);
     if (pointerCap) {
-        mouse.onpointermove = (ev) => {
+        while (mouse. ) {
+        onpointermove = (ev) => {
             ev.preventDefault();
+            ev.clientX = mouse.style.width; // CURRENT POINTER POSITION
+            ev.width = mouse.style.width = ev.clientX; // +1 increase
+            ev.height = mouse.style.height = ev.clientY; // +1 increase
             while (true) {
-                ev.clientX = mouse.style.width; // CURRENT POINTER POSITION
-                ev.width = mouse.style.width = ev.clientX; // +1 increase
-                ev.height = mouse.style.height = ev.clientY; // +1 increase
                 ht.setProperty('--chatheight', ev.height);
                 ht.setProperty('--msgwidth', ev.width);
             }
@@ -92,6 +91,10 @@ function downHandler (ev) {
     } else {
         return
     }
+}
+function init () {
+    const mouse = document.getElementById('resizeIt');
+    mouse.onpointerdown = downHandler;
 }
 
 

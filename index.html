@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
@@ -8,21 +7,18 @@
     <link href="lib/css/styles.css" rel="stylesheet">
     <link href="lib/bootstrap/bootstrap.css" rel="stylesheet">
     <link href="lib/jquery/jquery-ui.css" rel="stylesheet">
-
     <script nonce src="lib/jquery/jquery.js"></script>
     <script nonce src="lib/jquery/jquery-ui.js"></script>
     <script nonce src="lib/bootstrap/bootstrap.js"></script>
     <script nonce type="Module" src="./modules.js"></script>
-    <title>Hello World!</title>
+    <title>Open AI ChatApp!</title>
   </head>
   <body>
     <header class="header row" id="main">
       <button id="imgcontainer" type="button" class="btn btn-primary position-relative">
-        <svg class="bi" width="40" height="32">
-          <a id="RAP" href="#home" class="nav-link active py-3 border-bottom" aria-current="page" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
-            <img id="RAPP" src="lib/logo/colorlogo.png" alt="Rackley.app" ...>
-          </a>
-        </svg>
+        <a id="RAP" href="#home" class="nav-link active py-3 border-bottom" aria-current="page" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+          <img id="RAPP" src="lib/logo/colorlogo2.png" alt="Rackley.app" ...>
+        </a>
       </button>
     <h1 id="header">OpenAI ChatApp!</h1>
     </header>
@@ -49,7 +45,7 @@
             <li>
               <button type="button" class="btn btn-primary position-relative">
                 <svg class="bi" width="24" height="24" role="img" aria-label="Customers">
-                  <img src="assets/images/key.svg" alt="OpenAI API Key" >
+                  <img src="lib/images/key.svg" alt="OpenAI API Key" >
                 </svg>
                 </button>
             </li>
@@ -88,9 +84,12 @@
           <div id="app"></div>
         </div>
         <form class="row resizable" id="formDataEvent" nonce action="#" onsubmit="FormDataEvent">
+          <span id="resizeIt" onmousedown="init()" draggable="false" class="badge rounded-pill bg-warning text-dark"><img src="lib/images/box-arrow-in-up-right.svg " alt="^" aria-posinset="1" onpointerdown="lib/images/arrows-angle-contract.svg"></span>
           <textarea id="message" name="message" class="form-control resizable" aria-label="With textarea"></textarea>
           <div class="column resizable" id="options1">
             <div class="input-group mb-3">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span class="visually-hidden">Loading...</span>
               <input type="file" accept="all" name="file" class="form-control" onchange="FormDataEvent" nonce id="fileInput">
             </div>
           </div>
