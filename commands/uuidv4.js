@@ -16,9 +16,6 @@ const conn = mariadb.createConnection({
 
 const cur = mariadb.createPool({ connectAttributes: { connectTimeout: 1000 } }); //** 1s */ mariadb.
 
-
-
-
 module.exports = function () {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);

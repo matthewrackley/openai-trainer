@@ -58,10 +58,21 @@ temperature.addEventListener("input", (event) => {
     tempvalue.innerHTML = event.target.value;
 });
 
-var chatHt = document.querySelector('#chatht');
-var ht = getComputedStyle(document.querySelector(':root'));
-let formHt = ht.getPropertyValue('--formheight');
+var root = getComputedStyle(document.querySelector(':root'));
 
+var workingHeight = getComputedStyle(document.getElementById('formDataEvent'));
+
+let resizerY = document.querySelector('div.input-area');
+let resizerX = document.querySelector('div.message-input');
+var resizerHt = getComputedStyle(document.querySelector('div.input-area'));
+var resizerWd = getComputedStyle(document.querySelector('div.message-input'));
+let initYHt = root.height - resizerHt.height;
+let initXWd = root.width - resizerWd.width;
+console.log(initYHt);
+console.log(initXWd);
+
+var resizedHeight = getComputedStyle(document.getElementById('chat-area'));
+var resizedWidthTwo = getComputedStyle(document.getElementById('options2'));
 
 $("#message").resizable({
     alsoResize: "#chat-area"
@@ -72,35 +83,45 @@ $("#message").resizable({
 
 
 function downHandler (ev) {
-    const mouse = document.getElementById('resizeIt');
-    mouse.setPointerCapture(ev.pointerId);
+    const resizer = document.getElementById('resizeIt');
+    resizer.setPointerCapture(ev.pointerId);
 
-    let pointerCap = mouse.hasPointerCapture(ev.pointerId);
+    let initX, initY, diffX, diffY;
+    resizer.addEventListener('mousedown', function (dn) {
+        console.log(dn.clientX);
+        console.log(dn.clientY);
+        initX = dn.clientX - resizer.offsetLeft;
+        initY = dn.clientY - resizer.offsetTop;
+        console.log(initX);
+        console.log(initY);
+    });
+    let pointerCap = resizer.hasPointerCapture(ev.pointerId);
     if (pointerCap) {
-        while (mouse. ) {
-        onpointermove = (ev) => {
-            ev.preventDefault();
-            ev.clientX = mouse.style.width; // CURRENT POINTER POSITION
-            ev.width = mouse.style.width = ev.clientX; // +1 increase
-            ev.height = mouse.style.height = ev.clientY; // +1 increase
-            while (true) {
-                ht.setProperty('--chatheight', ev.height);
-                ht.setProperty('--msgwidth', ev.width);
-            }
+        resizer.addEventListener('mousemove', function (mv) {
+            diffX = mv.clientX - initX;
+            diffY = mv.clientY - initY;
+
+            resizer.style.left = (resizer.offsetLeft - diffX) + 'px';
+            resizer.style.top = (resizer.offsetTop - diffY) + 'px';
+
+            var adjustedLeft = resizer.style.left
+            var adjustedTop = resizer.style.top
+        });
+        while (true) {
+            root.setProperty('--height', resizedHeight.height);
+            root.setProperty('--msgwidth', resizedWidthOne.width);
+            resizedHeight.setProperty('height', resizedHeight.height);
+            // resizedWidthTwo.setProperty(property, value)
         }
+
     } else {
-        return
+    return
     }
 }
 function init () {
-    const mouse = document.getElementById('resizeIt');
-    mouse.onpointerdown = downHandler;
+    const resizer = document.getElementById('resizeIt');
+    resizer.onpointerdown = downHandler;
 }
-
-
-
-const mouseEvent = document.getElementById("message");
-mouseEvent.onpointerdown = downHandler;
 
 
 

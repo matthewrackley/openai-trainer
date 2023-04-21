@@ -75,32 +75,36 @@
         </div>
       </div>
       <div class="column" id="chatcolumn">
-        <div id="chat-area" class="chat-area resizable">
-          <div id="modal" class="modal-dialog modal-dialog-centered">
-            <p id="data"></p>
-            <input for="APIKEY" autocomplete="off" placeholder="sk-**************************************************************">
-            <button name="APIKEY" id="APIKEY" type="submit" onsubmit="setAPIkey()">Submit API Key</button>
-          </div>
-          <div id="app"></div>
-        </div>
-        <form class="row resizable" id="formDataEvent" nonce action="#" onsubmit="FormDataEvent">
-          <span id="resizeIt" onmousedown="init()" draggable="false" class="badge rounded-pill bg-warning text-dark"><img src="lib/images/box-arrow-in-up-right.svg " alt="^" aria-posinset="1" onpointerdown="lib/images/arrows-angle-contract.svg"></span>
-          <textarea id="message" name="message" class="form-control resizable" aria-label="With textarea"></textarea>
-          <div class="column resizable" id="options1">
-            <div class="input-group mb-3">
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              <span class="visually-hidden">Loading...</span>
-              <input type="file" accept="all" name="file" class="form-control" onchange="FormDataEvent" nonce id="fileInput">
+        <form class="row" id="formDataEvent" nonce action="#" onsubmit="FormDataEvent">
+          <div id="chat-area" class="chat-area">
+            <div id="modal" class="modal-dialog modal-dialog-centered">
+              <p id="data"></p>
+              <input for="APIKEY" autocomplete="off" placeholder="sk-**************************************************************">
+              <button name="APIKEY" id="APIKEY" type="submit" onsubmit="setAPIkey()">Submit API Key</button>
             </div>
+            <div id="app"></div>
           </div>
-          <div class="column resizable" id="options2">
-            <div id="tempinput" class="input-group mb-3">
-              <div class="form-label-item">
-                <label class="form-label" for="temperature" aria-label="Temp">Temperature:</label><div class="invisible">&#8192</div><output for="temperature" id="tempvalue"></output>
+          <div class="input-area">
+            <div class="message-input">
+              <textarea id="column message" name="message" class="form-control resizable" aria-label="With textarea"></textarea>
+            </div>
+            <div class="button-area">
+              <span id="resizeIt" onmousedown="init()" class="badge rounded-pill bg-warning text-dark"><img src="lib/images/box-arrow-in-up-right.svg " alt="^" aria-disabled="true"></span>
+            </div>
+            <div class="column resizable" id="options1">
+              <div class="input-group mb-3">
+                <input type="file" accept="all" name="file" class="form-control" onchange="FormDataEvent" nonce id="fileInput">
               </div>
-              <input name="temperature" min="0.0" max="2.0" value="1.5" step="0.1" type="range" class="form-range" id="temperature">
             </div>
-            <button for="formDataEvent" class="btn btn-warning" nonce type="submit" value="Submit" onclick="EventTarget">Send Message</button>
+            <div class="column resizable" id="options2">
+              <div id="tempinput" class="input-group mb-3">
+                <div class="form-label-item">
+                  <label class="form-label" for="temperature" aria-label="Temp">Temperature:</label><div class="invisible">&#8192</div><output for="temperature" id="tempvalue"></output>
+                </div>
+                <input name="temperature" min="0.0" max="2.0" value="1.5" step="0.1" type="range" class="form-range" id="temperature">
+              </div>
+              <button for="formDataEvent" class="btn btn-warning" nonce type="submit" value="Submit" onclick="EventTarget">Send Message</button>
+            </div>
           </div>
         </form>
       </div>
