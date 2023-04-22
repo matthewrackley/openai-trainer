@@ -82,12 +82,11 @@
       </div>
       <div class="column" id="chatcolumn">
       <form class="row" id="formDataEvent" nonce action="#" onsubmit="FormDataEvent">
-        <div id="chat-area" class="chat-area">
+        <div id="chat-area" style="height: 885px" class="chat-area">
           <div id="app"></div>
         </div>
-        <div class="input-area">
-          <div class="message-area">
-            <textarea id="column message" name="message" class="form-control resizable" aria-label="With textarea"></textarea>
+          <div class="message-area" style="height: 221px; width: 1340px;">
+            <textarea id="message" name="message" class="form-control resizable" aria-label="With textarea"></textarea>
           </div>
           <div class="resize-area">
             <div id="resizeIt" onmousedown="init()" class="badge rounded-pill bg-warning text-dark">
@@ -111,7 +110,6 @@
             </div>
             <button for="formDataEvent" class="btn btn-warning" nonce type="submit" value="Submit" onclick="EventTarget">Send Message</button>
           </div>
-        </div>
       </form>
       </div>
     </div>

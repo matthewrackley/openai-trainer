@@ -56,6 +56,56 @@ tempvalue.textContent = temperature.value;
 temperature.addEventListener("input", (event) => {
     tempvalue.innerHTML = event.target.value;
 });
+const resizer = document.getElementById('resizeIt');
+
+const adj = {
+    msg: {
+        element: document.querySelector('div.message-area'),
+        get X () {
+            return getComputedStyle(adj.msg.element).width;
+        },
+        get Y () {
+            return getComputedStyle(adj.msg.element).height;
+        },
+    },
+    opt: {
+        element: document.querySelector('div.options'),
+        get X () {
+            return getComputedStyle(adj.opt.element).width;
+        },
+        get Y () {
+            return getComputedStyle(adj.opt.element).height;
+        },
+    },
+    chat: {
+        element: document.querySelector('div.chat-area'),
+        get X () {
+            return getComputedStyle(adj.chat.element).width;
+        },
+        get Y () {
+            return getComputedStyle(adj.chat.element).height;
+        },
+    },
+    head: {
+        element: document.querySelector('#main'),
+        get X () {
+            return getComputedStyle(adj.head.element).width;
+        },
+        get Y () {
+            return getComputedStyle(adj.head.element).height;
+        },
+    },
+    side: {
+        element: document.querySelector('div.sidebar'),
+        get X () {
+            return getComputedStyle(adj.side.element).width;
+        },
+        get Y () {
+            return getComputedStyle(adj.side.element).height;
+        },
+    },
+};
+
 
 const root = {
     element: document.querySelector(':root'),
@@ -84,27 +134,27 @@ const resize = {
         return getComputedStyle(this.element).height;
     },
     r: {
-        element: document.getElementById('resizeIt'),
+        resizer,
         get X () {
-            const messageArea = document.querySelector('div.message-area');
-            return getComputedStyle(messageArea).width;
-        },
-        get Y () {
-            const inputArea = document.querySelector('div.input-area');
-            return getComputedStyle(inputArea).height;
+            return getComputedStyle(adj.msg.element).width;
         },
     },
     d: {
         get X () {
-            const optionArea = document.querySelector('div.options');
-            return getComputedStyle(optionArea).width;
+            return getComputedStyle(adj.opt.element).width;
         },
         get Y () {
-            const chatArea = document.querySelector('div.chat-area');
-            return getComputedStyle(chatArea).height;
+            return getComputedStyle(adj.chat.element).height;
         },
     }
 };
+const adjHeight = getComputedStyle(adj.chat.element);
+const adjWidth = getComputedStyle(adj.msg.element);
+const rootElement = getComputedStyle(root.element);
+const workWidth = root.X - adj.side.X;
+const workHeight = root.Y - adj.head.Y;
+
+
 console.log(root.X); // 2560px
 console.log(root.Y); // 1256px
 console.log(root.work.X); // 2296px
@@ -129,7 +179,7 @@ console.log(resize.d.X); // 449.917px
 console.log(resize.d.Y); // 885.117px
 
 // Make the DIV element draggable:
-dragElement(document.getElementById("resizeIt"));
+dragElement(resizer);
 
 function dragElement (elmnt) {
     var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -163,6 +213,10 @@ function dragElement (elmnt) {
         // set the element's new position:
         elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
         elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        const rezLeft = (resizer.offsetLeft - parseInt(adj.side.X, 10)) + 'px';
+        adj.chat.element.style.height = ((elmnt.offsetTop - pos2) - parseInt(adj.head.Y, 10)) + "px";
+        adj.msg.element.style.height = ((elmnt.offsetTop + pos2) + parseInt(adj.chat.Y, 10)) + "px";
+        adj.msg.element.style.width = ((elmnt.offsetLeft - pos1) - parseInt(adj.side.X, 10)) + "px";
     }
 
     function closeDragElement () {
@@ -177,7 +231,7 @@ function dragElement (elmnt) {
 //         return window.getComputedStyle(messageArea).width;
 //     },
 //     get Y () {
-//         return window.getComputedStyle(inputArea).height;
+//         return window.getComputedStyle(inp).height;
 //     },
 // };
 // const resized = {
@@ -225,13 +279,12 @@ function downHandler (ev) {
 
             resizer.style.left = (resizer.offsetLeft - diffX) + 'px';
             resizer.style.top = (resizer.offsetTop - diffY) + 'px';
-
             var adjustedLeft = resizer.style.left
             var adjustedTop = resizer.style.top
         });
         while (true) {
-            root.setProperty('--height', resizedHeight.height);
-            root.setProperty('--msgwidth', resizedWidthOne.width);
+            rootElement.setProperty('--height', resizedHeight.height);
+            rootElement.setProperty('--msgwidth', resizedWidthOne.width);
             resizedHeight.setProperty('height', resizedHeight.height);
             // resizedWidthTwo.setProperty(property, value)
         }
