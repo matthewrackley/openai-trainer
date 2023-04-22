@@ -9,7 +9,7 @@
 const A = require('./classes/Ajax.js');
 const showAlert = require('./events/showAlert.js');
 const AJAX = new A.default('http://192.168.0.1:5500', './api/gateway.js');
-
+const { genCookie } = require('./events/cookies.js');
 window.addEventListener('DOMContentLoaded', () => {
     const replaceText = (selector, text) => {
         const element = document.getElementById(selector);
@@ -38,5 +38,6 @@ const mod = {
     timezone: timezone,
     AJAX: AJAX,
     showAlert: showAlert,
+    genCookie: genCookie,
 };
 module.exports = mod;

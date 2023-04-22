@@ -8,7 +8,6 @@
  */
 
 
-
 // const { AJAX, timezone, showAlert } = require("./preload");
 // Set a nonce to correctly guard webapp
 
@@ -58,25 +57,150 @@ temperature.addEventListener("input", (event) => {
     tempvalue.innerHTML = event.target.value;
 });
 
-var root = getComputedStyle(document.querySelector(':root'));
+const root = {
+    element: document.querySelector(':root'),
+    get X () {
+        return getComputedStyle(this.element).width;
+    },
+    get Y () {
+        return getComputedStyle(this.element).height;
+    },
+    work: {
+        element: document.getElementById('formDataEvent'),
+        get X () {
+            return getComputedStyle(this.element).width;
+        },
+        get Y () {
+            return getComputedStyle(this.element).height;
+        },
+    },
+};
+const resize = {
+    element: document.getElementById('formDataEvent'),
+    get X () {
+        return getComputedStyle(this.element).width;
+    },
+    get Y () {
+        return getComputedStyle(this.element).height;
+    },
+    r: {
+        element: document.getElementById('resizeIt'),
+        get X () {
+            const messageArea = document.querySelector('div.message-area');
+            return getComputedStyle(messageArea).width;
+        },
+        get Y () {
+            const inputArea = document.querySelector('div.input-area');
+            return getComputedStyle(inputArea).height;
+        },
+    },
+    d: {
+        get X () {
+            const optionArea = document.querySelector('div.options');
+            return getComputedStyle(optionArea).width;
+        },
+        get Y () {
+            const chatArea = document.querySelector('div.chat-area');
+            return getComputedStyle(chatArea).height;
+        },
+    }
+};
+console.log(root.X); // 2560px
+console.log(root.Y); // 1256px
+console.log(root.work.X); // 2296px
+console.log(root.work.Y); // 1114.4px
+const work = {
+    topO () {
+        let offset = root.Y - root.work.Y;
+        return offset;
+    },
+    leftO () {
+        let offset = root.X - root.work.X;
+        return offset;
+    },
+};
+console.log(work.topO()); // NaN
+console.log(work.leftO()); // NaN
+console.log(resize.X); // 2296px
+console.log(resize.Y); // 1114.4px
+console.log(resize.r.X); // 1335.75px
+console.log(resize.r.Y); // 221.267px
+console.log(resize.d.X); // 449.917px
+console.log(resize.d.Y); // 885.117px
 
-var workingHeight = getComputedStyle(document.getElementById('formDataEvent'));
+// Make the DIV element draggable:
+dragElement(document.getElementById("resizeIt"));
 
-let resizerY = document.querySelector('div.input-area');
-let resizerX = document.querySelector('div.message-input');
-var resizerHt = getComputedStyle(document.querySelector('div.input-area'));
-var resizerWd = getComputedStyle(document.querySelector('div.message-input'));
-let initYHt = root.height - resizerHt.height;
-let initXWd = root.width - resizerWd.width;
+function dragElement (elmnt) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    if (document.getElementById(elmnt.id + "header")) {
+        // if present, the header is where you move the DIV from:
+        document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+    } else {
+        // otherwise, move the DIV from anywhere inside the DIV:
+        elmnt.onmousedown = dragMouseDown;
+    }
+
+    function dragMouseDown (e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag (e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement () {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+    }
+}
+// const resizer = {
+//     element: document.getElementById('resizeIt'),
+//     get X () {
+//         return window.getComputedStyle(messageArea).width;
+//     },
+//     get Y () {
+//         return window.getComputedStyle(inputArea).height;
+//     },
+// };
+// const resized = {
+//     get X () {
+//         return window.getComputedStyle(optionArea).width;
+//     },
+//     get Y () {
+//         return window.getComputedStyle(chatArea).height;
+//     },
+// }
+
+let initYHt = root.Y - resize.r.Y;
+let initXWd = root.X - resize.r.X;
 console.log(initYHt);
 console.log(initXWd);
 
-var resizedHeight = getComputedStyle(document.getElementById('chat-area'));
-var resizedWidthTwo = getComputedStyle(document.getElementById('options2'));
+var resizedHeight = window.getComputedStyle(document.getElementById('chat-area'));
 
-$("#message").resizable({
-    alsoResize: "#chat-area"
-});
+
+
+// $("#message").resizable({
+//     alsoResize: "#chat-area"
+// });
     // let ourheight = document.getElementById('message').style.height; // NULL
     // let height = ht.getPropertyValue('--height'); // 80% starting value
     // let width = document.getElementById('message').style.width.; // NULL
@@ -88,8 +212,6 @@ function downHandler (ev) {
 
     let initX, initY, diffX, diffY;
     resizer.addEventListener('mousedown', function (dn) {
-        console.log(dn.clientX);
-        console.log(dn.clientY);
         initX = dn.clientX - resizer.offsetLeft;
         initY = dn.clientY - resizer.offsetTop;
         console.log(initX);
@@ -127,10 +249,10 @@ function init () {
 
 
 // chatHt.addEventListener('change', (event) => {
-//     var dimensions = getComputedStyle(':root').getPropertyValue('--formheight'); // dimensions of the css :root element
+//     var dimensions = window.getComputedStyle(':root').getPropertyValue('--formheight'); // dimensions of the css :root element
 //     // --msgwidth, --formheight and --chatheight are variables in the css file
 
-//     getComputedStyle(ht).setProperty('--msgheight', '100%')
+//     window.getComputedStyle(ht).setProperty('--msgheight', '100%')
 // }
 
 // // Create a function for setting a variable value

@@ -1,46 +1,57 @@
-//** ====================================================== //
-//** -- INFO -- Cookies and their possible attributes       //
-//** ====================================================== //
-/** ; domain = domain-- the host to which the cookie will be sent
- *  ;expires=date -- the maximum lifetime of the cookie as a date
- *  ;max-age=max-age-in-seconds -- the max life of cookie in seconds
- *  ;partitioned -- Cookie will be stored in partitioned storage
- *  ;path=path -- the path to which the cookie will be sent
- *  ;samesite -- the cookie will only be sent with a same-site request
- *      lax -- CSFR blocking, GET, sufficient for user tracking
- *     strict -- ALL cross site blocked
- *      none -- ALL cross site allowed
- *  ;secure -- the cookie will only be sent with an encrypted request
- *               over the HTTPS protocol
- *  encodeURIComponent() -- encodes cookie URI component for passing
- *  some browsers allow "__Secure-" and "__Host-" prefix for secure cookies
- *  __Secure- -- Cookie can only pass on secure connections
- *  __Host- -- Above + must have path=/ and no domain(host only)
-//*========================================================= **/
-
+/**
+ *  @author Matthew Rackley
+ *  @email matthew.rackley17@gmail.com
+ *  @date 2023-04-21
+ *  @name cookies.js
+ *  @module events/cookies.js
+ *  @description Provides a mini-library for creating cookies
+ *  @param {string} key - The name of the cookie
+ *  @param {string} value - The value of the cookie
+ *  @param {object} age - The age of the cookie
+ *  @param {string} age.count - The number of terms
+ *  @param {string} age.term - The term of the count
+ *      - seconds
+ *      - minutes
+ *      - hours
+ *      - days
+ *      - weeks
+ *      - months
+ *  @param {object} security - The security of the cookie
+ *  @param {string} security.domain - The domain of the cookie
+ *  @param {string} security.path - The path of the cookie
+ *  @param {string} security.type - The type of security
+ *      - basic
+ *      - tracking
+ *      - crossOrigin
+ *      - sameSite
+ *      - externalApi
+ *      - internalApi
+ *      - hashed
+ *      - insecure
+ *      - custom
+ *  @returns {string} - The cookie string
+ *  @example create.cookie('test', 'test', { count: 1, term: 'day' }, { type: 'basic', domain: 'localhost', path: '/' });
+ *  @example create.cookie('test', 'test', { count: 2, term: 'days' }, { type: 'hashed', domain: 'localhost', path: '/' });
+ *  @example create.cookie('test', 'test', { count: 3, term: 'weeks' }, { type: 'externalApi', domain: 'localhost', path: '/' });
+ *  @example create.cookie('test', 'test', { count: 4, term: 'months' }, { type: 'internalApi', domain: 'localhost', path: '/' });
+ *  @example create.cookie('test', 'test', { count: 6, term: 'day' }, { type: 'sameSite', domain: 'localhost', path: '/' });
+ *  @example create.cookie('test', 'test', { count: 12, term: 'month' }, { type: 'tracking', domain: 'localhost', path: '/' });
+ *  @example create.cookie('test', 'test', { count: 6, term: 'hours' }, { type: 'crossOrigin', domain: 'localhost', path: '/' });
+ *  @example create.cookie('test', 'test', { count: 18, term: 'days' }, { type: 'insecure', domain: 'localhost', path: '/' });
+ */
 const { gen } = require('../events/hashGen.js');
 const setSecurity = {
-    basic: () => {
-        return 'HttpOnly ;SameSite=Lax ;Secure';
-    },
-    tracking: () => {
-        return 'SameSite=none ;Secure';
-    },
-    crossOrigin: () => {
-        return 'HttpOnly ;SameSite=None ;Secure';
-    },
-    sameSite: (domain) => {
-        return `HttpOnly ;SameSite=Strict ;Secure ;Domain=${ domain }`;
-    },
-    externalApi: (domain, path) => {
-        return `HttpOnly ;SameSite=None ;Secure ;Domain=${ domain }; Path=${ path }`;
-    },
-    internalApi: (domain, path) => {
-        return `HttpOnly ;SameSite=Strict ;Secure ;Domain=${ domain }; Path=${ path }`;
-    },
-    hashed: (value) => {
-        const secureHash = gen.sec.key('hmac', value);
-        return { value: secureHash };
+    basic: () => 'HttpOnly; SameSite=Lax; Secure',
+    tracking: () => 'SameSite=None; Secure',
+    crossOrigin: () => 'HttpOnly; SameSite=None; Secure',
+    sameSite: (domain, path) =>
+        `HttpOnly; SameSite=Strict; Secure; Domain=${ domain }; Path=${ path }`,
+    externalApi: (domain, path) =>
+        `HttpOnly; SameSite=None; Secure; Domain=${ domain }; Path=${ path }`,
+    internalApi: (domain, path) =>
+        `HttpOnly; SameSite=Strict; Secure; Domain=${ domain }; Path=${ path }`,
+    hashed: async (value) => {
+        return await gen.key(value, 'hmac');
     },
     insecure: () => {
         console.error('Insecure cookie created. This is not recommended.');
@@ -55,269 +66,167 @@ const setSecurity = {
             case 'crossOrigin':
                 return setSecurity.crossOrigin();
             case 'sameSite':
-                return setSecurity.sameSite();
+                return setSecurity.sameSite(domain, path);
             case 'externalApi':
                 return setSecurity.externalApi(domain, path);
             case 'internalApi':
                 return setSecurity.internalApi(domain, path);
             case 'hashed':
-                if (value === undefined) {
-                    let value = name;
-                }
-
                 return setSecurity.hashed(value);
             case 'insecure':
                 return setSecurity.insecure();
-            case undefined:
-                return setSecurity.basic();
             default:
                 return setSecurity.hashed(type);
         }
     },
 };
 
-function age (count = 1, term = undefined) {
-    var second = 1;
+// Sets the domain attr of the cookie
+const setDomain = (domain = 'localhost') => domain;
+
+// Sets the path attr of the cookie
+const setPath = (path = '/') => path;
+
+
+// Sets the Max-Age attr of the cookie
+function setAge (count = 1, term = '86400') {
     var seconds = 1;
-    var minute = 60;
     var minutes = 60;
-    var hour = 3600;
     var hours = 3600;
-    var day = 86400;
     var days = 86400;
-    var week = 604800;
     var weeks = 604800;
-    var month = 2592000;
     var months = 2592000;
-    var year = 31536000;
     var years = 31536000;
-    if (term === undefined) {
-        term = day;
-        return term;
-    }
     switch (term) {
-        case second || seconds:
+        case 'second':
+        case 'seconds':
             var time = count * seconds;
-            return time;
-        case minute || minutes:
+            return 'Max-Age=' + time;
+        case 'minute':
+        case 'minutes':
             var time = count * minutes;
-            return time;
-        case hour || hours:
+            return 'Max-Age=' + time;
+        case 'hour':
+        case 'hours':
             var time = count * hours;
-            return time;
-        case day || days:
+            return 'Max-Age=' + time;
+        case 'day':
+        case 'days':
             var time = count * days;
-            return time;
-        case week || weeks:
+            return 'Max-Age=' + time;
+        case 'week':
+        case 'weeks':
             var time = count * weeks;
-            return time;
-        case month || months:
+            return 'Max-Age=' + time;
+        case 'month':
+        case 'months':
             var time = count * months;
-            return time;
-        case year || years:
+            return 'Max-Age=' + time;
+        case 'year':
+        case 'years':
             var time = count * years;
-            return time;
+            return 'Max-Age=' + time;
         case undefined:
             var time = count * term;
-            return time;
+            return 'Max-Age=' + time;
         default:
             var time = 6 * hours;
-            return time;
+            return 'Max-Age=' + time;
     };
 };
-function handler(option, key, value = undefined) {
-    var name = name;
-    var value = value;
-    const optKey = Object.keys(key);
-    const optVal = Object.values(value);
-    const optLen = optKey.length;
-    for (let i = 0; i < optLen; i++) {
-        switch (optKey[i]) {
-            case 'days':
-                var days = optVal[i];
-                break;
-            case 'security':
-                var security = optVal[i];
-                break;
-            case 'domain':
-                var domain = optVal[i];
-                break;
-            case 'path':
-                var path = optVal[i];
-                break;
-            default:
-                console.error('Invalid cookie option.');
-                break;
-        };
-        console.log(optKey[i]);
-        console.log(optVal[i]);
-        console.log(optLen);
-        switch (optKey[security]) {
-            case 'basic':
-                security = setSecurity.level('basic');
-                break;
-            case 'tracking':
-                security = setSecurity.level('tracking');
-                break;
-            case 'crossOrigin':
-                security = setSecurity.level('crossOrigin');
-                break;
-            case 'sameSite':
-                security = setSecurity.level('sameSite', domain);
-                break;
-            case 'externalApi':
-                security = setSecurity.level('externalApi', domain, path);
-                break;
-            case 'internalApi':
-                security = setSecurity.level('internalApi', domain, path);
-                break;
-            case 'hashed':
-                security = setSecurity.level('hashed', name);
-                break;
-            case 'insecure':
-                security = setSecurity.level('insecure');
-                break;
-            case undefined:
-                security = setSecurity.level('basic');
-                break;
-            default:
-                security = setSecurity.level('hashed', optVal[i]);
-                break;
-        }
-        console.log(optKey[security]);
-        console.log(optVal[security]);
-        console.log(optLen[security]);
-        switch (optKey[age(optKey[i], ))]) {
-            case 'day':
-                days = time('day');
-
+// Handles the options for the cookie
+const handler = (key, val, ...options) => {
+    const opt = { // defines the default options
+        term: 'day',
+        domain: 'localhost',
+        path: '/',
     };
 
-            value, days, security
-    options(optKey[i]) = {
-        [name]: name,
-        [value]: value,
-        [days]: days,
-        [security]: this.security,
-    };
-    (name, value) security => {
-    switch (security) {
-        case 'basic':
-            if (security === undefined) {
-                security = setSecurity.level('basic');
-                return security;
-            };
-            if (security === 'hashed') {
-                security = setSecurity.level(security, name);
-                return security;
-            };
-            security = setSecurity.level(security);
-            return security;
-    };
-});
-
-    if (days === undefined) {
-
-        var cookieHeader = `${ name }=${ encodeURIComponent(value) }; ${ security }`;
+    // defines how to handle the key
+    if (key === 'age') { // When the key is age, only look for opt.term value
+        opt.term = options[0] || opt.term;
     }
-});
-};
-}
 
-const create = {
-    cookie: {
-        custom: (name, value, days = undefined, security) => {
-            if (security === 'hashed') {
-                var hashedKey = setSecurity.hashed(name);
-            } else {
-                security = '';
-                var securityLevel = setSecurity.level(security);
-            }
+    if (key === 'security') { // When the key is security, only look for opt.domain and opt.path values
+        opt.domain = options[0] || opt.domain;
+        opt.path = options[1] || opt.path;
+    }
 
-            security = setSecurity.level(security);
-            if (days === undefined) {
-        },
-        }, value, days, security = undefined ) =>
-            (security = setSecurity.level(security), {
-                let { [name]: value } = setSecurity.hashed(name);
-                [value] = JSON.stringify({ [name]: value });
-                switch (value && security) {
-                    case (security === 'hashed'):
+    switch (key) {
+        case 'security': // When the key is security, handle it this way
+            switch (val) {
+                case 'basic':
+                case 'tracking':
+                case 'crossOrigin':
+                case 'insecure':
+                case undefined: // If val === any of the above, or undefined
+                    return setSecurity.level(val); // return the security level === val
+                case 'externalApi':
+                case 'internalApi':
+                case 'sameSite': // If val === any site specific options
+                    const [domain, path] = [opt.domain, opt.path]; // define the domain and path
+                    return setSecurity.level(val, '', domain, path); // return the security level === val with the domain and path
+                default: // default to a hashed key
+                    return setSecurity.level('hashed', val);
             }
-        })) => {
-
-            if (days === undefined) {
-                document.cookie = `${ name }=${ encodeURIComponent(value) }; ${ setSecurity.level(security) }`;
-                var cookieHeader = `${ name }=${ encodeURIComponent(value) }; ${ setSecurity.level(security) }`;
-            } else {
-                document.cookie = `${ name }=${ encodeURIComponent(value) }; max-age=${ time(days) }; ${ setSecurity.level(security) }`;
-                var cookieHeader = `${ name }=${ encodeURIComponent(value) }; max-age=${ time(days) }; ${ setSecurity.level(security) }`;
-            };
-            return cookieHeader;
-        },
-        sameSite: (name, value, days = undefined) => {
-            var { [name]: hashedKey } = setSecurity.hashed(name);
-            if (days === undefined) {
-                document.cookie = `${ name }=${ encodeURIComponent(setSecurity.hashed(value)) }; ${ setSecurity.sameSite }`;
-                var cookieHeader = `${ name }=${ encodeURIComponent(setSecurity.hashed(value)) }; ${ setSecurity.sameSite }`;
-            } else {
-                document.cookie = `${ name }=${ encodeURIComponent(setSecurity.hashed(value)) }; max-age=${ time(days) }; ${ setSecurity.sameSite }`;
-                var cookieHeader = `${ name }=${ encodeURIComponent(setSecurity.hashed(value)) }; max-age=${ time(days) }; ${ setSecurity.sameSite }`;
-            };
-            return cookieHeader;
-        },
-        crossOrigin: (name, value, days = undefined) => {
-            var { [name]: hashedKey } = setSecurity.hashed(name);
-            if (days === undefined) {
-                document.cookie = `${name}=${encodeURIComponent(setSecurity.level('hashed', value))} ;${ setSecurity.crossOrigin }`;
-                var cookieHeader = `${ name }=${ encodeURIComponent(setSecurity.level('hashed', value)) } ;${ setSecurity.crossOrigin }`;
-                return cookieHeader;
-            }
-            document.cookie = `${name}=${encodeURIComponent(setSecurity.level('hashed', value))} ;max-age=${ time(days) }; ${ setSecurity.crossOrigin }`;
-            var cookieHeader = `${name}=${encodeURIComponent(setSecurity.level('hashed', value))} ;max-age=${ time(days) }; ${ setSecurity.crossOrigin }`;
-            return cookieHeader;
-        },
-        tracking: (name, value, days = undefined) => {
-            var { [name]: hashedKey } = setSecurity.hashed(name);
-            if (days === undefined) {
-                document.cookie = `${ name }=${ encodeURIComponent(setSecurity.level('hashed', value)) }; ${ setSecurity.tracking }`;
-                var cookieHeader = `${ name }=${ encodeURIComponent(setSecurity.level('hashed', value)) }; ${ setSecurity.tracking }`;
-                return cookieHeader;
-            }
-            document.cookie = `${ name }=${ encodeURIComponent(setSecurity.level('hashed', value)) }; max-age=${ time(days) }; ${ setSecurity.tracking }`;
-            var cookieHeader = `${ name }=${ encodeURIComponent(setSecurity.level('hashed', value)) }; max-age=${ time(days) }; ${ setSecurity.tracking }`;
-            return cookieHeader;
-        },
-        insecure: (name, value, days = undefined) => {
-            var { [name]: hashedKey } = setSecurity.hashed(name);
-            if (days === undefined) {
-                document.cookie = `${ name }=${ encodeURIComponent(setSecurity.level('hashed', value)) }; ${ setSecurity.insecure }`;
-                var cookieHeader = `${ name }=${ encodeURIComponent(setSecurity.level('hashed', value)) }; ${ setSecurity.insecure }`;
-                return cookieHeader;
-            };
-            document.cookie = `${ name }=${ encodeURIComponent(setSecurity.level('hashed', value)) }; max-age=${ time(days) }; ${ setSecurity.insecure }`;
-            var cookieHeader = `${ name }=${ encodeURIComponent(setSecurity.level('hashed', value)) }; max-age=${ time(days) }; ${ setSecurity.insecure }`;
-            return cookieHeader;
-        },
-
-    },
-    commandCookie: (name, security = undefined, command) => {
-        function execute (name) {
-            var { [name]: hashedKey } = setSecurity.hashed(name);
-            if (!document.cookie.split('; ').find((row) =>
-                row.startsWith(`${ name }`))) {
-                name = document.cookie = `${ name }=${ encodeURIComponent(hashedKey) }; expires=Fri, 31 Dec 9999 23:59:59 GMT; ${ setSecurity.level(security) }`;
-                command(name);
-                return name;
-            };
-        };
-        function clear(name) {
-            name = document.cookie = `${ name }=; expires=Thu, 01 Jan 1970 00:00:00 UTC; ${ setSecurity.level(security) }`;
-        };
-    },
-};
-module.exports = {
-    create,
-    setSecurity,
+        case 'age': // When the key is age
+            return setAge(val, opt.term); // return the age with the term
+        case 'domain': // When the key is domain
+            return setDomain(val); // return the domain
+        case 'path': // When the key is path
+            return setPath(val); // return the path
+        default: // If the key passed is an invalid option
+            console.error('Invalid cookie option.'); // log an error
+    }
 };
 
+// Create the cookie
+function genCookie (key, value, age = { count: 1, term: 'days' }, security = { type: 'basic', domain: 'localhost', path: '/' }, hashed = false) {
+    const { count, term } = age; // destructure the age object
+    const { type, domain, path } = security; // destructure the security object
+    if (hashed === true) { // If hashed === true, hash the value
+        return new Promise(async(resolve, reject) => {
+            const hashedKey = await setSecurity.hashed(value);
+            if (hashedKey) {
+                resolve(hashedKey);
+            } else {
+                reject('Error hashing key.');
+            }
+            const cookieStr = `${ key }=${ encodeURIComponent(hashedKey) }; ${ handler(
+                'age',
+                count,
+                term
+            ) }; ${ handler(
+                'security',
+                type,
+                domain,
+                path
+            ) }`;
+            return cookieStr;
+        });
+    } else { // If hashed === false, just provide a key value pair
+        const cookieStr = `${ key }=${ encodeURIComponent(value) }; ${ handler(
+            'age',
+            count,
+            term
+        ) }; ${ handler(
+            'security',
+            type,
+            domain,
+            path
+        ) }`;
+        return cookieStr;
+    };
+};
+
+/**
+ *  3 examples:
+ *  genCookie('test', 'value', { count: 1, term: 'days' }, { type: 'basic', domain: 'localhost', path: '/' })
+ *  test=value; Max-Age=86400; HttpOnly; SameSite=Lax; Secure
+ *  cookie('test', 'test', { count: 1, term: 'days' }, { type: 'basic', domain: 'localhost', path: '/' });
+ *  cookie('test', 'test', { count: 1, term: 'days' }, { type: 'basic', domain: 'localhost', path: '/' });
+ *
+ *
+ *
+ */
+module.exports = { genCookie };

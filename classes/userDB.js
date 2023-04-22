@@ -15,4 +15,7 @@ class User {
         this.lastname = lastname;
         this.phonenumber = phonenumber;
     }
+    get fullname () {
+        return this.firstname + ' ' + this.lastname;
+    }
 }

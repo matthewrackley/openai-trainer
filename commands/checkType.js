@@ -1,7 +1,5 @@
 const Event = require('../classes/Event')
 module.exports = {
-    name: Event.Execution,
-    key: Event.Execution.key,
     execute (key, type) {
         if (key !== 'checkType') {
             return
