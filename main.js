@@ -8,7 +8,8 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+
     }
   })
 
@@ -43,16 +44,13 @@ app.on('window-all-closed', function () {
 // code. You can also put them in separate files and require them here.
 require('./app');
 require('./api/gateway');
-const hG = require('./events/hashGen');
+const { gen } = require('./events/hashGen');
+const { csp } = require('./events/csp');
 const { local, gA } = require('./api/LocalDB');
 local.saveSession(gA);
-let nonce = window.crypto.getRandomValues(new Uint8Array(32)).join('').replace(/\//g, '_');
-hG.csp.apply();
+var nonce = window.crypto.getRandomValues(new Uint8Array(32)).join('').replace(/\//g, '_');
+csp.apply.basic();
 sessionStorage.setItem('nonce', nonce);
 window.addEventListener("beforeunload", function (event) {
   sessionStorage.removeItem('nonce');
 });
-
-let metaTag = document.createElement("meta");
-metaTag.nonce = nonce;
-document.head.appendChild(metaTag);

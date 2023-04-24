@@ -1,49 +1,8 @@
 const http = require('http');
-const e = require('../commands/message');
-const hG = require('../events/hashGen');
+const { message } = require('../commands/message');
+const { gen } = require('../events/hashGen');
 const U = require('../classes/User');
 const url = 'http://192.168.0.155:5500';
-const RequestHandler = require('../classes/ReqHandler.js');
-
-
-
-RequestHandler.callApiGateway();
-
-
-http.createServer((request, response) => {
-  if (request.method === 'GET' && request.url === `${ url }/index.html`) {
-    let body = '';
-    let cookie = document.cookie = `nonce=${ encodeURIComponent(hG.gen.sec('cookie')) }; HttpOnly; SameSite=None; Secure;`;
-    let hash = hG.keyGen();
-    request.on('readable', () => {
-      let chunk;
-      while (null !== (chunk = request.read())) {
-        body += chunk;
-      }
-    }).on('end', (ev) => {
-      request.on('ev', () => {
-      try {
-        const { param1, param2 } = JSON.parse(body);
-
-        e.message(param1, param2);
-        module.exports = {
-          param1,
-          param2,
-        }
-      } catch (error) {
-        response.writeHead(400, { 'Content-Type': 'text/plain', 'Set-Cookie': cookie });
-        response.end(`Invalid JSON: ${ error.message }`);
-      }
-    }).on('close', HTTPRequestHandler => {
-      )
-    const responseData = { data: 'Success!' };
-    response.writeHead(200, { 'Content-Type': 'application/x-www-form-urlencoded', 'Set-Cookie': cookie });
-    response.end(JSON.stringify(responseData), 'utf8');
-  } else {
-    response.writeHead(404, { 'Content-Type': 'text/plain' });
-    response.end('Not found');
-  }
-});
 
 class HTTPRequestHandler {
   constructor () { }
@@ -121,6 +80,51 @@ class HTTPRequestHandler {
     }
   }
 }
+const RequestHandler = new HTTPRequestHandler();
+
+
+http.createServer((request, response) => {
+  if (request.method === 'GET' && request.url === `${ url }/index.html`) {
+    let body = '';
+    let cookie = `nonce=${ encodeURIComponent(gen.nonce()) }; HttpOnly; SameSite=None; Secure;`;
+    let hash = gen.key('cookieHash').then((value) => {
+      return value;
+    }).catch((error) => {
+      return error;
+    });
+    request.on('readable', () => {
+      let chunk;
+      while (null !== (chunk = request.read())) {
+        body += chunk;
+      }
+    }).on('end', (ev) => {
+      request.on('ev', () => {
+        try {
+          const { param1, param2 } = JSON.parse(body);
+
+          message(param1, param2);
+          module.exports = {
+            param1,
+            param2,
+          }
+        } catch (error) {
+          response.writeHead(400, { 'Content-Type': 'text/plain', 'Set-Cookie': cookie });
+          response.end(`Invalid JSON: ${ error.message }`);
+        }
+      }).on('close', response => {
+        RequestHandler.callApiGateway(response, cookie);
+      });
+    });
+    const responseData = { data: 'Success!' };
+    response.writeHead(200, { 'Content-Type': 'application/x-www-form-urlencoded', 'Set-Cookie': cookie });
+    response.end(JSON.stringify(responseData), 'utf8');
+  } else {
+    response.writeHead(404, { 'Content-Type': 'text/plain' });
+    response.end('Not found');
+  }
+});
+
+
 
 module.exports = {
   HTTPRequestHandler,

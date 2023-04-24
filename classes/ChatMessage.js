@@ -1,8 +1,7 @@
-const U = require('../classes/User.js');
 const chatBubble = document.getElementById('app');
 
 module.exports = {
-    ChatMessage: class ChatMessage extends HTMLElement {
+    ChatMessage: class extends HTMLElement {
         constructor (username, message) {
             super();
             // Create a text node with the message content

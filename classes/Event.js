@@ -1,38 +1,115 @@
 const directory = require('path');
 const hG = require('../events/hashGen');
 
-class Event {
+class Library {
+    name = initializer;
     constructor (name, types, path) {
-        this.name = name;
         this.types = types;
         this.path = directory.resolve(path);
-        this.key = hG.gen.sec.key(this.name, 'hmac');
-        this[name] = () => {
-            console.log(` Executing ${ name }...`);
-        }
-    };
-    name = (apiREF, values = undefined) => {
-        apiREF(values = undefined);
-    };
-    execute() {
-        this.name(this.types, this.path);
+        this.key = hG.gen.key(this.name, 'hmac');
+        this.name = (param1, param2) => {
+            param1; // process the value passed
+            param2; // process the value passed
+        };
+
+    }
+    className = () => {
+        className = new Library(this.className, this.types, this.path);
     };
 };
-class Library extends Event {
-    constructor (command, name, types, path) {
+
+class  Library {
+    constructor (className, name, types, path) {
         super(name, types, path);
-        this[command] = () => {
+        function execute () {
             console.log(` Executing ${ command }...`);
-        }
+        };
+        this.className = className.value;
+        className = () => {
+            className = new Library(this.className, this.types, this.path);
+        };
     };
+    className () {
+
+        return this.name;
+    };
+
 };
 
-const Execution = new Library('Execution', 'Execution', ['checkType', 'createCompletion', 'sendMessage', 'message', 'uuidv4'], '../commands/');
-const Occurence = new Event('Occurence', ['ajaxRequest', 'cookies', 'showAlert', 'fileUpload', 'uriSwap', 'hashGen'], '../events/');
-const ClassCall = new Event('ClassCall', ['User', 'ChatMessage', 'Ajax', 'Event', 'ReqHandler', 'userDB'], '../classes/');
-const ApiCall = new Event('ApiCall', ['express', 'gateway', 'jsdocs', 'LocalDB', 'server'], '../apis/');
+let Execute = new Event
+    ('Execution',
+        'Execution',
+        [
+            'checkType',
+            'createCompletion',
+            'sendMessage',
+            'message',
+            'uuidv4'
+        ], '../commands/'
+);
+let Execution = new Library
+    ('Execution',
+        [
+            'checkType',
+            'createCompletion',
+            'sendMessage',
+            'message',
+            'uuidv4'
+        ], '../commands/'
+);
 
-Execution;
+
+let Occurence = new Event
+    ('Occurence',
+        'Occurence',
+        [
+            'ajaxRequest',
+            'cookies',
+            'showAlert',
+            'fileUpload',
+            'uriSwap',
+            'hashGen'
+        ], '../events/'
+    );
+
+let ClassCall = new Event
+    ('ClassCall',
+        [
+            'User',
+            'ChatMessage',
+            'Ajax',
+            'Event',
+            'ReqHandler',
+            'userDB'
+        ], '../classes/'
+    );
+
+let ApiCall = new Event
+    ('ApiCall',
+        [
+            'express',
+            'gateway',
+            'jsdocs',
+            'LocalDB',
+            'server'
+        ], '../apis/'
+    );
+
+Execution.Execute = () => {
+    console.log(` Executing ${ command }...`);
+};
+Execution.name;
+Execute.name;
+Execution.Execute;
+Execute.className;
+Execute.Execute;
+Execute.Execution;
+
+() {
+
+};
+
+Event.Execution;
 
 Occurence.name;
 Occurence.name();

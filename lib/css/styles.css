@@ -67,6 +67,7 @@ button#imgcontainer {
     left: 1rem;
     place-items: center;
     place-content: center;
+    padding: 0 !important;
 }
 #centerrow {
     background-color: steelblue;
@@ -102,6 +103,7 @@ div.column#chatcolumn {
     width: 90%; /** 90% - chatcolumn */
     height: 100%; /** 100% - chatcolumn */
     object-fit: contain;
+    overflow: hidden;
 }
 form#formDataEvent{
     display: flex;
@@ -109,8 +111,9 @@ form#formDataEvent{
     width: 100%; /** 100% - form */
     padding: 0.25rem;
     margin: 0.25rem;
-    overflow: auto;
+    overflow: hidden;
     resize: vertical;
+    place-content: baseline;
 }
 div.chat-area {
     display: flex;
@@ -123,7 +126,7 @@ div.chat-area {
     max-height: 80%;
     place-items: center;
     resize: vertical;
-    overflow: auto;
+    overflow: hidden;
     width: 100%;
 }
 div.message-area {
@@ -135,16 +138,12 @@ div.message-area {
     z-index: 1;
     max-width: 100%;
     max-height: 100%;
+    height: 59%;
+    min-width: 25%;
 }
 #message {
     display: flex;
     overflow: visible;
-}
-#resizeIt {
-    position: absolute;
-    z-index: 9;
-    width: 35px;
-    height: 35px;
 }
 #resizeItheader {
     position: absolute;
@@ -157,17 +156,40 @@ div.resize-area {
     place-content: flex-end;
     width: 0;
     height: 0;
+    padding: 0rem;
+}
+div#options1 {
+    width: 12.5%;
+    min-width: 12.5%;
+    max-width: 25%;
 }
 div.options {
     display: flex;
     flex-direction: column;
-    max-width: 18%;
     padding: 0.25rem !important;
     margin: 0.25rem !important;
-    resize: both;
-    overflow: auto;
+    resize: horizontal;
+    overflow: hidden;
     max-height: 20%;
+    width: 18%;
 }
+div.options-mini {
+    display: flex;
+    flex-direction: column;
+    padding: 0.25rem !important;
+    margin: 0.25rem !important;
+    resize: horizontal;
+    overflow: hidden;
+    max-height: 20%;
+    width: 9%;
+}
+div#options2,
+div#options3 {
+    min-width: 8.75%;
+    max-width: 17.5%;
+    overflow: visible;
+}
+
 label[for="temperature"] {
     display: inline;
     place-self: center;
@@ -215,8 +237,9 @@ hr.dropdown-divider {
     display: initial;
 }
 img#RAPP {
-    height: 100px;
+    height: fit-content;
     width: auto;
+    padding: 0 !important;
     top: 0;
     left: 0;
 }
@@ -230,7 +253,8 @@ ul#messages {
     z-index: 1;
 }
 a#RAP {
-    width: 100%;
+    width: 50%;
+    padding: 0 !important;
 }
 
 input {
@@ -238,7 +262,7 @@ input {
     height: auto;
 }
 button {
-    width: 10%;
+    width: 70%;
     height: auto;
     display: block;
 }
@@ -389,10 +413,12 @@ div.invisible {
     resize: both;
     overflow: auto;
 }
-.badge.rounded-pill.bg-warning.text-dark {
+#resizeIt {
     color: #f90;
     display: flex;
-    z-index: 5;
+    z-index: 9;
+    width: 35px;
+    height: 35px;
     place-self: auto;
     place-items: center;
     position: absolute;

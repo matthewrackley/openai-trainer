@@ -59,6 +59,27 @@ temperature.addEventListener("input", (event) => {
 const resizer = document.getElementById('resizeIt');
 
 const adj = {
+    form: {
+        element: document.getElementById('formDataEvent'),
+        get X () {
+            return getComputedStyle(adj.form.element).width;
+        },
+        get Y () {
+            return getComputedStyle(adj.form.element).height;
+        },
+    },
+    opt: {
+        element: document.querySelector('div.options'),
+        get X () {
+            return getComputedStyle(adj.opt.element).width;
+        },
+    },
+    opt2: {
+        element: document.querySelectorAll('div.options').item(1),
+        get X () {
+            return getComputedStyle(adj.opt2.element).width;
+        },
+    },
     msg: {
         element: document.querySelector('div.message-area'),
         get X () {
@@ -68,29 +89,14 @@ const adj = {
             return getComputedStyle(adj.msg.element).height;
         },
     },
-    opt: {
-        element: document.querySelector('div.options'),
-        get X () {
-            return getComputedStyle(adj.opt.element).width;
-        },
-        get Y () {
-            return getComputedStyle(adj.opt.element).height;
-        },
-    },
     chat: {
         element: document.querySelector('div.chat-area'),
-        get X () {
-            return getComputedStyle(adj.chat.element).width;
-        },
         get Y () {
             return getComputedStyle(adj.chat.element).height;
         },
     },
     head: {
         element: document.querySelector('#main'),
-        get X () {
-            return getComputedStyle(adj.head.element).width;
-        },
         get Y () {
             return getComputedStyle(adj.head.element).height;
         },
@@ -100,83 +106,12 @@ const adj = {
         get X () {
             return getComputedStyle(adj.side.element).width;
         },
-        get Y () {
-            return getComputedStyle(adj.side.element).height;
-        },
     },
 };
-
-
-const root = {
-    element: document.querySelector(':root'),
-    get X () {
-        return getComputedStyle(this.element).width;
-    },
-    get Y () {
-        return getComputedStyle(this.element).height;
-    },
-    work: {
-        element: document.getElementById('formDataEvent'),
-        get X () {
-            return getComputedStyle(this.element).width;
-        },
-        get Y () {
-            return getComputedStyle(this.element).height;
-        },
-    },
-};
-const resize = {
-    element: document.getElementById('formDataEvent'),
-    get X () {
-        return getComputedStyle(this.element).width;
-    },
-    get Y () {
-        return getComputedStyle(this.element).height;
-    },
-    r: {
-        resizer,
-        get X () {
-            return getComputedStyle(adj.msg.element).width;
-        },
-    },
-    d: {
-        get X () {
-            return getComputedStyle(adj.opt.element).width;
-        },
-        get Y () {
-            return getComputedStyle(adj.chat.element).height;
-        },
-    }
-};
-const adjHeight = getComputedStyle(adj.chat.element);
-const adjWidth = getComputedStyle(adj.msg.element);
-const rootElement = getComputedStyle(root.element);
-const workWidth = root.X - adj.side.X;
-const workHeight = root.Y - adj.head.Y;
-
-
-console.log(root.X); // 2560px
-console.log(root.Y); // 1256px
-console.log(root.work.X); // 2296px
-console.log(root.work.Y); // 1114.4px
-const work = {
-    topO () {
-        let offset = root.Y - root.work.Y;
-        return offset;
-    },
-    leftO () {
-        let offset = root.X - root.work.X;
-        return offset;
-    },
-};
-console.log(work.topO()); // NaN
-console.log(work.leftO()); // NaN
-console.log(resize.X); // 2296px
-console.log(resize.Y); // 1114.4px
-console.log(resize.r.X); // 1335.75px
-console.log(resize.r.Y); // 221.267px
-console.log(resize.d.X); // 449.917px
-console.log(resize.d.Y); // 885.117px
+const adjHeight = getComputedStyle(adj.chat.element).height;
+const adjWidth = getComputedStyle(adj.msg.element).width;
+const optWidth = getComputedStyle(adj.opt.element).width;
+const opt2Width = getComputedStyle(adj.opt2.element).width;
 
 // Make the DIV element draggable:
 dragElement(resizer);
@@ -186,6 +121,11 @@ function dragElement (elmnt) {
     if (document.getElementById(elmnt.id + "header")) {
         // if present, the header is where you move the DIV from:
         document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+    } else if (elmnt.ondoubleclick) {
+        adj.msg.style.width = 60 + '%';
+        adj.chat.element.style.height = 80 + '%';
+        resizer.s0tyle.top = 81.60 + '%';
+        resizer.style.left = 59.25 + '%';
     } else {
         // otherwise, move the DIV from anywhere inside the DIV:
         elmnt.onmousedown = dragMouseDown;
@@ -213,10 +153,24 @@ function dragElement (elmnt) {
         // set the element's new position:
         elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
         elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-        const rezLeft = (resizer.offsetLeft - parseInt(adj.side.X, 10)) + 'px';
         adj.chat.element.style.height = ((elmnt.offsetTop - pos2) - parseInt(adj.head.Y, 10)) + "px";
-        adj.msg.element.style.height = ((elmnt.offsetTop + pos2) + parseInt(adj.chat.Y, 10)) + "px";
         adj.msg.element.style.width = ((elmnt.offsetLeft - pos1) - parseInt(adj.side.X, 10)) + "px";
+        adj.msg.element.style.height = parseInt(adj.form.Y, 10) - parseInt(adj.chat.Y, 10) + "px";  // adj.head.Y was originally chat
+        if (adj.msg.X < '40%') {
+            const initOpt = adj.opt.element.style.width = 25 + '%';
+            const initOpt2 = adj.opt2.element.style.width = 30 + '%';
+            adj.opt.element.style.width = ((parseInt(adj.form.X, 10) - parseInt(adj.msg.X, 10)) - parseInt(initOpt2, 10)) + "px";
+        } else if (adj.msg.X < '60%') {
+            const initOpt = adj.opt.element.style.width = 12.5 + '%';
+            const initOpt2 = adj.opt2.element.style.width = 22.5 + '%';
+            adj.opt.element.style.width = ((parseInt(adj.form.X, 10) - parseInt(adj.msg.X, 10)) - parseInt(initOpt2, 10)) + "px";
+            adj.opt2.element.style.width = ((parseInt(adj.form.X, 10) - parseInt(adj.msg.X, 10)) - parseInt(initOpt, 10)) + "px";
+        } else {
+            const initOpt = adj.opt.element.style.width = 12.5 + '%';
+            const initOpt2 = adj.opt2.element.style.width = 12.5 + '%';
+            adj.opt.element.style.width = ((parseInt(adj.form.X, 10) - parseInt(adj.msg.X, 10)) - parseInt(initOpt2, 10)) + "px";
+            adj.opt2.element.style.width = ((parseInt(adj.form.X, 10) - parseInt(adj.msg.X, 10)) - parseInt(initOpt, 10)) + "px";
+        }
     }
 
     function closeDragElement () {
@@ -225,6 +179,14 @@ function dragElement (elmnt) {
         document.onmousemove = null;
     }
 }
+const resetBtn = document.getElementById('resizeReset');
+resetBtn.addEventListener('click', (dbl) => {
+    adj.msg.element.style.width = 58 + '%';
+    adj.chat.element.style.height = 80 + '%';
+    resizer.style.top = 81.60 + '%';
+    resizer.style.left = 59.25 + '%';
+});
+
 // const resizer = {
 //     element: document.getElementById('resizeIt'),
 //     get X () {
@@ -243,10 +205,6 @@ function dragElement (elmnt) {
 //     },
 // }
 
-let initYHt = root.Y - resize.r.Y;
-let initXWd = root.X - resize.r.X;
-console.log(initYHt);
-console.log(initXWd);
 
 var resizedHeight = window.getComputedStyle(document.getElementById('chat-area'));
 
