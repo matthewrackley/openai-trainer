@@ -57,75 +57,287 @@ temperature.addEventListener("input", (event) => {
     tempvalue.innerHTML = event.target.value;
 });
 const resizer = document.getElementById('resizeIt');
+prototype
+class Resizer extends HTMLElement {
+    constructor (...element, isQuery = true) {
+        super();
+        this.element = [];
+        if (typeof element === 'string') {
+            if (isQuery) {
+                this.element.push(document.querySelector(element));
+            } else {
+                this.element.push(document.getElementById(element));
+            }
+        } else if (element instanceof HTMLElement) {
+            this.element.push(element);
+        } else {
+            throw new Error('Element must be a string or an HTMLElement \n' +
+                `Example: new Resizer('#element') or new Resizer(document.getElementById('element'))`);
+        }
+        if (this.element.length === 0) {
+            throw new Error(`No element found for ${ element }`);
+        }
+    };
+    get X () {
+        return getComputedStyle(this.element).width;
+    };
+    get Y () {
+        return getComputedStyle(this.element).height;
+    };
 
-const adj = {
-    form: {
-        element: document.getElementById('formDataEvent'),
-        get X () {
-            return getComputedStyle(adj.form.element).width;
+    get style () {
+        return window.getComputedStyle(this.element);
+    };
+    get fontSz () {
+        return parseFloat(getComputedStyle(document.documentElement).fontSize);
+    };
+    get border () {
+        const border = this.style.border.match(/\d+\.?\d*rem/g).map(value => parseFloat(value) * this.fontSz);
+        return border.reduce((sum, value) => sum + value, 0) + 'px';
+    };
+    get margin () {
+        const margin = this.style.margin.match(/\d+\.?\d*rem/g).map(value => parseFloat(value) * this.fontSz);
+        return margin.reduce((sum, value) => sum + value, 0) + 'px';
+    };
+    get padding () {
+        const padding = this.style.padding.match(/\d+\.?\d*rem/g).map(value => parseFloat(value) * this.fontSz);
+        return padding.reduce((sum, value) => sum + value, 0) + 'px';
+    };
+    get offset () {
+        const offset = this.style.offset.match(/\d+\.?\d*rem/g).map(value => parseFloat(value) * this.fontSz);
+        return offset.reduce((sum, value) => sum + value, 0) + 'px';
+    };
+    get width () {
+        return parseFloat(this.X) - parseFloat(this.border) - parseFloat(this.margin) - parseFloat(this.padding) - parseFloat(this.offset);
+    };
+    get height () {
+        return parseFloat(this.Y) - parseFloat(this.border) - parseFloat(this.margin) - parseFloat(this.padding) - parseFloat(this.offset);
+    };
+    get left () {
+        return parseFloat(this.style.left);
+    };
+    get right () {
+        return parseFloat(this.style.right);
+};
+const pop = {
+    opt: {
+        left: {
+            el: document.getElementById('opt-left'),
+            get X () {
+                return getComputedStyle(root.opt.left.el).width;
+            },
+        },
+        middle: {
+            el: document.getElementById('opt-middle'),
+            get X () {
+                return getComputedStyle(root.opt.middle.el).width;
+            },
+        },
+        right: {
+            el: document.getElementById('opt-right'),
+            get X () {
+                return getComputedStyle(root.opt.right.el).width;
+            },
         },
         get Y () {
-            return getComputedStyle(adj.form.element).height;
-        },
-    },
-    opt: {
-        element: document.querySelector('div.options'),
-        get X () {
-            return getComputedStyle(adj.opt.element).width;
-        },
-    },
-    opt2: {
-        element: document.querySelectorAll('div.options').item(1),
-        get X () {
-            return getComputedStyle(adj.opt2.element).width;
-        },
+            return getComputedStyle(root.opt.left.el).height;
+        }
     },
     msg: {
-        element: document.querySelector('div.message-area'),
+        el: document.querySelector('div.message-area'),
         get X () {
-            return getComputedStyle(adj.msg.element).width;
+            return getComputedStyle(root.msg.el).width;
         },
         get Y () {
-            return getComputedStyle(adj.msg.element).height;
+            return getComputedStyle(root.msg.el).height;
         },
     },
     chat: {
-        element: document.querySelector('div.chat-area'),
-        get Y () {
-            return getComputedStyle(adj.chat.element).height;
-        },
-    },
-    head: {
-        element: document.querySelector('#main'),
-        get Y () {
-            return getComputedStyle(adj.head.element).height;
-        },
-    },
-    side: {
-        element: document.querySelector('div.sidebar'),
+        el: document.querySelector('div.chat-area'),
         get X () {
-            return getComputedStyle(adj.side.element).width;
+            return getComputedStyle(root.chat.el).width;
         },
+        get Y () {
+            return getComputedStyle(root.chat.el).height;
+        },
+    },
+    clmn: {
+        el: document.querySelector('#chatcolumn'),
+        get X () {
+            return getComputedStyle(root.clmn.el).width;
+        },
+        get Y () {
+            return getComputedStyle(root.clmn.el).height;
+        },
+        get style () {
+            return window.getComputedStyle(root.clmn.el);
+        },
+        get fontSz () {
+            return parseFloat(getComputedStyle(document.documentElement).fontSize);
+        },
+        get border () {
+            const border = root.clmn.style.border.match(/\d+\.?\d*rem/g).map(value => parseFloat(value) * root.clmn.fontSz);
+            return border.reduce((sum, value) => sum + value, 0) + 'px';
+        },
+        get margin () {
+            const margin = root.clmn.style.margin.match(/\d+\.?\d*rem/g).map(value => parseFloat(value) * root.clmn.fontSz);
+            return margin.reduce((sum, value) => sum + value, 0) + 'px';
+        },
+        get padding () {
+            const padding = root.clmn.style.padding.match(/\d+\.?\d*rem/g).map(value => parseFloat(value) * root.clmn.fontSz);
+            return padding.reduce((sum, value) => sum + value, 0) + 'px';
+        },
+        get totalVal () {
+            return parseInt(root.clmn.border, 10) + parseInt(root.clmn.margin, 10) + parseInt(root.clmn.pad, 10) + 'px';
+        },
+        get totalMrg () {
+            return parseInt(root.clmn.border, 10) + parseInt(root.clmn.padding, 10) + 'px';
+        }
+    },
+    form: {
+        el: document.getElementById('formDataEvent'),
+        get X () {
+            return getComputedStyle(root.form.el).width;
+        },
+        get Y () {
+            return getComputedStyle(root.form.el).height;
+        },
+        get style () {
+            return window.getComputedStyle(root.form.el);
+        },
+        get fontSz () {
+            return parseFloat(getComputedStyle(document.documentElement).fontSize);
+        },
+        get border () {
+            const border = root.form.style.border.match(/\d+\.?\d*rem/g).map(value => parseFloat(value) * root.form.fontSz);
+            return border.reduce((sum, value) => sum + value, 0) + 'px';
+        },
+        get margin () {
+            const margin = root.form.style.margin.match(/\d+\.?\d*rem/g).map(value => parseFloat(value) * root.form.fontSz);
+            return margin.reduce((sum, value) => sum + value, 0) + 'px';
+        },
+        get padding () {
+            const padding = root.form.style.padding.match(/\d+\.?\d*rem/g).map(value => parseFloat(value) * root.form.fontSz);
+            return padding.reduce((sum, value) => sum + value, 0) + 'px';
+        },
+        get totalVal () {
+            return parseInt(root.form.border, 10) + parseInt(root.form.margin, 10) + parseInt(root.form.padding, 10) + 'px';
+        },
+        get totalMrg () {
+            return parseInt(root.form.border, 10) + parseInt(root.form.padding, 10) + 'px';
+        },
+        boundary: {
+            get left () {
+                return (parseInt(root.form.X, 10) * 0.25) + 'px';
+            },
+            get top () {
+                return doc.header + 'px';
+            },
+            get bottom () {
+                return (parseInt(root.form.Y, 10) * 0.2) + 'px';
+            },
+            get width () {
+                return (parseInt(root.form.X, 10) * 0.725) + 'px'
+            },
+            get right () {
+                return (root.form.X - (root.form.boundary.left + root.form.boundary.width)) + 'px';
+            },
+            get height () {
+                return (root.form.Y * 0.8) + 'px';
+            }
+        }
+    },
+
+};
+
+const
+
+
+const doc = {
+    el: document.querySelector(':root'),
+    get X () {
+        return getComputedStyle(doc.el).width;
+    },
+    get Y () {
+        return getComputedStyle(doc.el).height;
+    },
+    get header () {
+        return (parseInt(doc.Y, 10) * 0.1) + 'px';
+    },
+    get sidebar () {
+        return (parseInt(doc.X, 10) * 0.1) + 'px';
+    },
+    boundary: {
+        get left () {
+            return (parseInt(form.X, 10) * 0.25) + 'px';
+        },
+        get top () {
+            return doc.header + 'px';
+        },
+        get bottom () {
+            return (parseInt(form.Y, 10) * 0.2) + 'px';
+        },
+        get width () {
+            return (parseInt(form.X, 10) * 0.725) + 'px'
+        },
+        get right () {
+            return (form.X - (doc.boundary.left + doc.boundary.width)) + 'px';
+        },
+        get height () {
+            return (form.Y * 0.8) + 'px';
+        }
+    }
+}
+function check () {
+    const workingAreaWidth = (parseInt(column.X, 10) + 'px');
+    const workingAreaHeight = (parseInt(column.Y, 10) + 'px');
+    const workRight = (parseInt(column.X, 10) - parseInt(column.totalVal, 10) + 'px');
+    const workHt = (parseInt(column.Y, 10) + 'px');
+    const num = [];
+    for (let i = 0; i < 3; i++) {
+        num[i] = console.log(`Root Document: \n`);
+        num[i] = console.log(`X = ${ doc.X } Y = ${ doc.Y } header = ${ doc.header } sidebar = ${ doc.sidebar }`);
+        num[i] = console.log('Boundaries: ');
+        num[i] = console.log(`LEFT = ${ doc.boundary.left } RIGHT = ${ doc.boundary.right } TOP = ${ doc.boundary.top } BOTTOM = ${ doc.boundary.bottom } WIDTH = ${ doc.boundary.width } HEIGHT = ${ doc.boundary.height }`);
+        num[i] = console.log('Working Area: ');
+        num[i] = console.log(`Width = ${ column.X } Height = ${ column.Y }`);
+        num[i] = console.log('Work Boundaries: ');
+        num[i] = console.log(`LEFT = ${ (parseInt(column.X, 10) * 0.25) + 'px' } RIGHT = ${ form.totalMrg } TOP = ${ form.totalMrg } BOTTOM = ${ form.totalMrg } WIDTH = ${ form.totalVal } HEIGHT = ${ form.totalVal }`);
+        return `${ num[0] } \n ${ num[1] } \n ${ num[2] }`;
+    }
+};
+
+const head = {
+    el: document.querySelector('#main'),
+    get Y () {
+        return getComputedStyle(head.el).height;
     },
 };
-const adjHeight = getComputedStyle(adj.chat.element).height;
-const adjWidth = getComputedStyle(adj.msg.element).width;
-const optWidth = getComputedStyle(adj.opt.element).width;
-const opt2Width = getComputedStyle(adj.opt2.element).width;
+const side = {
+    el: document.querySelector('div.sidebar'),
+    get X () {
+        return getComputedStyle(side.el).width;
+    },
+};
+const adjHeight = getComputedStyle(chat.el).height;
+const adjWidth = getComputedStyle(msg.el).width;
+const optLWidth = getComputedStyle(opt.left.el).width;
+const optMWidth = getComputedStyle(opt.middle.el).width;
+const optRWidth = getComputedStyle(opt.right.el).width;
 
+$(function () {
+    $(resizer).draggable({
+        containment: "div.resize-area"
+    });
+});
 // Make the DIV element draggable:
 dragElement(resizer);
 
 function dragElement (elmnt) {
-    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0, lastX = 0;
     if (document.getElementById(elmnt.id + "header")) {
         // if present, the header is where you move the DIV from:
         document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-    } else if (elmnt.ondoubleclick) {
-        adj.msg.style.width = 60 + '%';
-        adj.chat.element.style.height = 80 + '%';
-        resizer.s0tyle.top = 81.60 + '%';
-        resizer.style.left = 59.25 + '%';
     } else {
         // otherwise, move the DIV from anywhere inside the DIV:
         elmnt.onmousedown = dragMouseDown;
@@ -145,50 +357,127 @@ function dragElement (elmnt) {
     function elementDrag (e) {
         e = e || window.event;
         e.preventDefault();
+
         // calculate the new cursor position:
         pos1 = pos3 - e.clientX;
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
-        // set the element's new position:
+        let boundArea = form.el.parentElement.getBoundingClientRect();
+        let maxX = boundArea.width - form.el.offsetWidth;
+        let maxY = boundArea.height - form.el.offsetHeight;
+
+        // set the el's new position:
         elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
         elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-        adj.chat.element.style.height = ((elmnt.offsetTop - pos2) - parseInt(adj.head.Y, 10)) + "px";
-        adj.msg.element.style.width = ((elmnt.offsetLeft - pos1) - parseInt(adj.side.X, 10)) + "px";
-        adj.msg.element.style.height = parseInt(adj.form.Y, 10) - parseInt(adj.chat.Y, 10) + "px";  // adj.head.Y was originally chat
-        if (adj.msg.X < '40%') {
-            const initOpt = adj.opt.element.style.width = 25 + '%';
-            const initOpt2 = adj.opt2.element.style.width = 30 + '%';
-            adj.opt.element.style.width = ((parseInt(adj.form.X, 10) - parseInt(adj.msg.X, 10)) - parseInt(initOpt2, 10)) + "px";
-        } else if (adj.msg.X < '60%') {
-            const initOpt = adj.opt.element.style.width = 12.5 + '%';
-            const initOpt2 = adj.opt2.element.style.width = 22.5 + '%';
-            adj.opt.element.style.width = ((parseInt(adj.form.X, 10) - parseInt(adj.msg.X, 10)) - parseInt(initOpt2, 10)) + "px";
-            adj.opt2.element.style.width = ((parseInt(adj.form.X, 10) - parseInt(adj.msg.X, 10)) - parseInt(initOpt, 10)) + "px";
-        } else {
-            const initOpt = adj.opt.element.style.width = 12.5 + '%';
-            const initOpt2 = adj.opt2.element.style.width = 12.5 + '%';
-            adj.opt.element.style.width = ((parseInt(adj.form.X, 10) - parseInt(adj.msg.X, 10)) - parseInt(initOpt2, 10)) + "px";
-            adj.opt2.element.style.width = ((parseInt(adj.form.X, 10) - parseInt(adj.msg.X, 10)) - parseInt(initOpt, 10)) + "px";
-        }
-    }
 
+        // Adjust the input areas accordingly
+        chat.el.style.height = ((elmnt.offsetTop - pos2) - parseInt(head.Y, 10)) + "px";
+        msg.el.style.width = ((elmnt.offsetLeft - pos1) - parseInt(side.X, 10)) + "px";
+        msg.el.style.height = parseInt(form.Y, 10) - parseInt(chat.Y, 10) + "px";  // head.Y was originally chat
+
+        // Adjust the option areas accordingly
+        const msgWidthPercent = (parseInt(msg.el.style.width, 10) / parseInt(form.X, 10)) * 100;
+        if (msgWidthPercent < 50) {
+            opt.middle.el.style.width = `${ (msgWidthPercent - 65) * 2 }%`;
+            opt.middle.el.style.height = '20%';
+            opt.right.el.style.width = `${ (50 - msgWidthPercent) * 2 }%`;
+            opt.right.el.style.height = '20%';
+            opt.left.el.style.width = `${ 12.5 + ((msgWidthPercent - 25) / 2) }%`;
+            opt.left.el.style.height = '20%';
+            console.log(opt.left.el.style.width);
+        } else if (msgWidthPercent >= 50 && msgWidthPercent < 65) {
+            opt.middle.el.style.width = `${ (65 - msgWidthPercent) * 2 }%`;
+            opt.middle.el.style.height = '20%';
+            opt.right.el.style.width = `${ (msgWidthPercent - 50) * 2 }%`;
+            opt.right.el.style.height = '20%';
+            opt.left.el.style.width = `${ 22.5 - (msgWidthPercent - 50) }%`;
+            opt.left.el.style.height = '20%';
+            console.log(opt.right.el.style.width);
+        } else if (msgWidthPercent >= 65 && msgWidthPercent <= 81.5) {
+            opt.middle.el.style.width = `${ (msgWidthPercent - 65) * 2 }%`;
+            opt.middle.el.style.height = '20%';
+            opt.right.el.style.width = '0%';
+            opt.left.el.style.width = `${ 16.5 - (msgWidthPercent - 65) }%`;
+            opt.left.el.style.height = '20%';
+            console.log(opt.middle.el.style.width);
+            console.log(opt.right.el.style.width)
+        } else if (msgWidthPercent > 81.5 && msgWidthPercent <= 100) {
+            opt.right.el.style.width = '0rem';
+            opt.right.el.style.height = '0rem';
+            opt.middle.el.style.width = '0rem';
+            opt.middle.el.style.height = '0rem';
+            opt.left.el.style.width = `${ (100 - msgWidthPercent) * 2 }%`;
+            opt.left.el.style.height = '20%';
+            console.log(opt.left.el.style.width);
+            console.log(opt.middle.el.style.width);
+            console.log(opt.right.el.style.width);
+        } else {
+            opt.right.el.style.width = '0rem';
+            opt.right.el.style.height = '0rem';
+            opt.middle.el.style.width = '0rem';
+            opt.middle.el.style.height = '0rem';
+            opt.left.el.style.width = '0rem';
+            opt.left.el.style.height = '0rem';
+            console.log(opt.left.el.style.width);
+            console.log(opt.middle.el.style.width);
+            console.log(opt.right.el.style.width);
+        }
+        console.log(msgWidthPercent);
+    };
+
+        // if (msg.X <= '49.99%' && msg.X >= '0%') {
+        //     const initOptMiddle = opt.middle.el.style.width = 16 + '%';
+        //     const initOptRight = opt.right.el.style.width = 16 + '%';
+
+        //     opt.left.el.style.width = ((
+        //         parseInt(form.X, 10) - parseInt(msg.X, 10)) - (
+        //             parseInt(initOptLeft, 10) + parseInt(initOptRight, 10))) + "px";
+        // }
+        // function initOpt () {
+        //     opt.left.el.style.width = 12.5 + '%';
+        // };
+        // if (msg.el.style.width < '70%' && msg.el.style.width >= '50%') {
+        //     if (msg.X === '50%') {
+        //         initOpt();
+        //     };
+
+        //     const initOptMiddle = opt.middle.el.style.width = 16 + '%';
+        //     const initOptRight = opt.right.el.style.width = 16 + '%';
+
+        //     opt.middle.el.style.width = ((
+        //         parseInt(form.X, 10) - parseInt(msg.X, 10)) - (
+        //             parseInt(initOptLeft, 10) + parseInt(initOptRight, 10))) + "px";
+
+        //     opt.right.el.style.width = ((
+        //         parseInt(form.X, 10) - parseInt(msg.X, 10)) - (
+        //             parseInt(initOpt, 10) + parseInt(initOptMiddle, 10))) + "px";
+        // }
+        // if (msg.el.style.width >= '70%') {
+        //     const initOptLeft = opt.left.el.style.width = 12.5 + '%';
+        //     const initOptMiddle = opt.middle.el.style.width = 10.5 + '%';
+
+        //     opt.right.el.style.width = ((
+        //         parseInt(form.X, 10) - parseInt(msg.X, 10)) - (
+        //             parseInt(initOpt, 10) + parseInt(initOptMiddle, 10))) + "px";
+        // }
     function closeDragElement () {
         // stop moving when mouse button is released:
         document.onmouseup = null;
         document.onmousemove = null;
+        // remove the resizing attribute
     }
-}
+};
 const resetBtn = document.getElementById('resizeReset');
 resetBtn.addEventListener('click', (dbl) => {
-    adj.msg.element.style.width = 58 + '%';
-    adj.chat.element.style.height = 80 + '%';
+    msg.el.style.width = 50 + '%';
+    chat.el.style.height = 80 + '%';
     resizer.style.top = 81.60 + '%';
-    resizer.style.left = 59.25 + '%';
+    resizer.style.left = 50 + '%';
 });
 
 // const resizer = {
-//     element: document.getElementById('resizeIt'),
+//     el: document.getElementById('resizeIt'),
 //     get X () {
 //         return window.getComputedStyle(messageArea).width;
 //     },
@@ -252,7 +541,7 @@ function downHandler (ev) {
     }
 }
 function init () {
-    const resizer = document.getElementById('resizeIt');
+    resizer = document.getElementById('resizeIt');
     resizer.onpointerdown = downHandler;
 }
 

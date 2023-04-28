@@ -4,7 +4,7 @@
   "description": "My Electron application description",
   "keywords": [],
   "main": "./main.js",
-  "browser": "./server.js",
+  "browser": "./main.js",
   "version": "1.0.5",
   "author": "kali",
   "scripts": {

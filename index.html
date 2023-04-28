@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
@@ -30,6 +31,9 @@
     <div class="row" id="centerrow">
       <div class="sidebar">
         <div id="sidebar-content" class="d-flex flex-column flex-shrink-0 bg-light">
+          <div class="style-box col">
+            <div class="style-border col"></div>
+          </div>
           <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
             <li>
               <button type="button" class="btn btn-primary position-relative">
@@ -92,18 +96,20 @@
             <textarea id="message" name="message" class="form-control resizable" aria-label="With textarea"></textarea>
           </div>
           <div class="resize-area">
-            <div id="resizeIt" onmousedown="init()" class="badge rounded-pill bg-warning text-dark">
-              <div id="resizeItheader">
-                <img src="lib/images/box-arrow-in-up-right.svg " alt="^" aria-disabled="true">
+            <div class="resizer">
+              <div id="resizeIt" onmousedown="init()" class="badge rounded-pill bg-warning text-dark">
+                <div id="resizeItheader">
+                  <img src="lib/images/box-arrow-in-up-right.svg " alt="^" aria-disabled="true">
+                </div>
               </div>
             </div>
           </div>
-          <div class="options column" style="width: 12.5%;" id="options1">
+          <div class="options column" style="width: 12.5%" id="opt-left">
             <div class="input-group mb-3">
-              <input type="file" accept="all" name="file" class="form-control" onchange="FormDataEvent" nonce id="fileInput">
+              <input type="file" placeholder="Upload" accept="all" name="file" class="form-control" onchange="FormDataEvent" nonce id="fileInput">
             </div>
           </div>
-          <div class="options-mini column" style="width: 11.75%;" id="options2">
+          <div class="options mini column" id="opt-middle" style="width: 16%;">
             <div id="tempinput" class="input-group mb-3">
               <div class="form-label-item">
                 <label class="form-label" for="temperature" aria-label="Temp">Temperature:</label>
@@ -111,21 +117,27 @@
               </div>
               <input name="temperature" min="0.0" max="2.0" value="1.5" step="0.1" type="range" class="form-range" id="temperature">
             </div>
-
           </div>
-          <div class="options-mini column" style="width: 11.75%;" id="options2">
-            <div id="tempinput" class="input-group mb-3">
-              <div class="form-label-item">
-                <button for="formDataEvent" class="btn btn-warning" nonce type="submit" value="Submit" onclick="EventTarget">Send Message</button>
-              </div>
-              <input name="temperature" min="0.0" max="2.0" value="1.5" step="0.1" type="range" class="form-range" id="temperature">
+          <div class="options mini column" id="opt-right" style="width: 16%;">
+            <div class="form-label-item">
+              <button for="formDataEvent" class="btn btn-warning" nonce type="submit" value="Submit" onclick="EventTarget">Send Message</button>
             </div>
-            <button for="formDataEvent" class="btn btn-warning" nonce type="submit" value="Submit" onclick="EventTarget">Send Message</button>
           </div>
         </form>
       </div>
+      <footer class="status-bar">
+        <div class="style-box row">
+          <svg class="bi" width="24" height="24" role="img" viewBox="0 0 100 100">
+            <img class="dashed-line" src="lib/images/dashedLine.svg" alt="">
+          </svg>
+        </div>
+        <div class="status-bar">
+          <p class="status-bar">Made with ❤️ by <a href="https://rackley.app">Matthew Rackley</a></p>
+        </div>
+      </footer>
     </div>
     <!-- You can also require other files to run in this process -->
     <script nonce src="./renderer.js"></script>
   </body>
+
 </html>
