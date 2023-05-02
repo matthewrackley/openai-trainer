@@ -52,11 +52,9 @@
     "jsdoc-to-markdown": "^8.0.0"
   },
   "directories": {
+    "doc": "docs",
     "lib": "lib",
-    "events": "events",
-    "api": "api",
-    "commands": "commands",
-    "classes": "classes"
+    "test": "tests"
   },
   "repository": {
     "type": "git",
