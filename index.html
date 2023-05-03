@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta id="CSP" http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
-    <link href="lib/css/styles.css" rel="stylesheet">
-    <link href="lib/bootstrap/bootstrap.css" rel="stylesheet">
-    <link href="lib/jquery/jquery-ui.css" rel="stylesheet">
-    <script nonce src="lib/jquery/jquery.js"></script>
-    <script nonce src="lib/jquery/jquery-ui.js"></script>
-    <script nonce src="lib/bootstrap/bootstrap.js"></script>
+    <link href="./lib/css/styles.css" rel="stylesheet">
+    <link href="./lib/bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="./lib/jquery/jquery-ui.css" rel="stylesheet">
+    <script nonce src="./lib/jquery/jquery.js"></script>
+    <script nonce src="./lib/jquery/jquery-ui.js"></script>
+    <script nonce src="./lib/bootstrap/bootstrap.js"></script>
     <title>Open AI ChatApp!</title>
   </head>
   <div id="modal" class="modal-dialog modal-dialog-centered">
@@ -23,7 +23,7 @@
     <header class="header row" id="main">
       <button id="imgcontainer" type="button" class="btn btn-primary position-relative">
         <a id="RAP" href="#home" class="nav-link active py-3" aria-current="page" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
-          <img id="RAPP" src="lib/images/logo.svg" alt="Rackley.app" ...>
+          <img id="RAPP" src="./lib/images/logo.svg" alt="Rackley.app" ...>
         </a>
       </button>
       <h1 id="header">OpenAI ChatApp!</h1>
@@ -54,7 +54,7 @@
             <li>
               <button type="button" class="btn btn-primary position-relative">
                 <svg class="bi" width="24" height="24" role="img" aria-label="Customers">
-                  <img src="lib/images/key.svg" alt="OpenAI API Key">
+                  <img src="./lib/images/key.svg" alt="OpenAI API Key">
                 </svg>
               </button>
             </li>
@@ -65,7 +65,7 @@
           </ul>
           <div class="dropdown border-top">
             <a href="#" class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="lib/images/wrench-adjustable.svg" alt="mdo" width="24" height="24" class="rounded-circle">
+              <img src="./lib/images/wrench-adjustable.svg" alt="mdo" width="24" height="24" class="rounded-circle">
             </a>
             <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
               <li>
@@ -99,7 +99,7 @@
             <div class="resizer">
               <div id="resizeIt" onmousedown="init()" class="badge rounded-pill bg-warning text-dark">
                 <div id="resizeItheader">
-                  <img src="lib/images/box-arrow-in-up-right.svg " alt="^" aria-disabled="true">
+                  <img src="./lib/images/box-arrow-in-up-right.svg " alt="^" aria-disabled="true">
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@
       <footer class="status-bar">
         <div class="style-box row">
           <svg class="bi" width="24" height="24" role="img" viewBox="0 0 100 100">
-            <img class="dashed-line" src="lib/images/dashedLine.svg" alt="">
+            <img class="dashed-line" src="./lib/images/dashedLine.svg" alt="">
           </svg>
         </div>
         <div class="status-bar">
