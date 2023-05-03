@@ -1,5 +1,6 @@
 'use strict';
-const path = require('path');
+
+const path = require('node:path');
 const { merge } = require('webpack-merge');
 const Html = require('html-webpack-plugin');
 const MiniCssExtract = require('mini-css-extract-plugin');
@@ -8,23 +9,21 @@ const Brotli = require('brotli-webpack-plugin');
 const base = {
   context: path.resolve('src'),
   entry: [
-    './index.jsx',
+    './app.jsx',
   ],
-  output: {
-    path: path.join(__dirname, 'output'),
-    filename: 'bundle.js'
+  resolve: {
+    extensions: ['.jsx', '.js', '.json'],
   },
   module: {
+    strictExportPresence: true,
     rules: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            sourceMap: true
-          }
-        }
+        loader: 'babel-loader',
+        options: {
+          sourceMap: true,
+        },
       },
       {
         test: /\.css$/,
@@ -41,7 +40,7 @@ const base = {
         test: /\.svg$/,
         type: 'asset/inline',
       },
-    ]
+    ],
   },
   plugins: [
     new Html({
@@ -51,6 +50,7 @@ const base = {
     new MiniCssExtract(),
   ],
 };
+
 const environments = {
   development: {
     mode: 'development',
@@ -60,7 +60,7 @@ const environments = {
       proxy: [
         {
           context: ['/api'],
-          target: 'http://localhost:3000',
+          target: 'http://localhost:5500',
         },
       ],
     },
