@@ -1,7 +1,6 @@
 import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './app.jsx';
-import { Nav } from './Nav.jsx';
+import App from './app.jsx'
 import './css/styles.css';
 import './bootstrap/bootstrap.css';
 import './bootstrap/bootstrap.js';
@@ -15,13 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  createRoot(document.getElementById('nav')).render(
-    <StrictMode>
-      <Nav />
-    </StrictMode>,
-  );
-});
+
 
 document.addEventListener('DOMContentLoaded', () => {
   createRoot(document.getElementById('head')).render(

@@ -3,7 +3,7 @@
   "productName": "OpenAI",
   "description": "My Electron application description",
   "keywords": [],
-  "main": "./dist/index.js",
+  "main": "./src/index.jsx",
   "port": "3000",
   "version": "1.0.5",
   "author": "kali",
